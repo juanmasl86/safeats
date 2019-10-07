@@ -1,36 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Acceso SafEats!{% endblock %}
 
 {% block body %}
+<style>
+    body {
+            background-image: url('fondo2.jpg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+            background-attachment: fixed;
+            /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+            background-size: cover;
+            background-color: #cccccc;
+        }
+
+    .foto {
+        border-radius: 5px 0px 0px 5px;
+    }
+
+    .container-login{
+        margin-top: 200px;
+    }
+</style>
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
+     <main class="container mx-auto">
+            
+            <div class="col-xl-8 col-lg-8 p-0 mx-auto container-login">
+                <div class="row">
+                    <div class="col-6 m-0 p-0 bg-secondary border border-dark rounded-left">
+                        <!--<div class="col-12 border-bottom border-dark">
+                            <img class="mx-auto" src="logo2.png"/>
+                        </div> -->
+                        <div class="col-12 p-0">
+                            <!--  <img class="mx-auto foto" src="ensalada.jpg" width="100%"/> -->
+                          <img class="mx-auto foto" src="terraza.jpg" width="100%"/> 
+                        </div>
+                    </div>
+                    <div class="col-6 m-0 px-3 py-5 bg-info border border-dark rounded-right">
+                        <div class="col-11 mx-auto">
+                    <h1 class="h3 mb-3 font-weight-normal">Inicie sesion</h1>
+                    <label for="inputEmail" class="sr-only">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control mb-2" placeholder="Email" required autofocus>
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control mb-2" placeholder="Password" required>
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
         See https://symfony.com/doc/current/security/remember_me.html
-
+    #}
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" name="_remember_me"> Remember me
+                <input type="checkbox" name="_remember_me"> Recordar
             </label>
         </div>
-    #}
+    
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
+    <button class="btn btn-lg btn-primary mb-3" type="submit">
+        Entrar
     </button>
+
+    <p>¿No tiene cuenta? <a href="/register">Registrate!</a></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </form>
 {% endblock %}

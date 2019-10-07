@@ -1,15 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Registro SafEats!{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<style>
+    body {
+        background-image: url('fondo2.jpg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+        background-attachment: fixed;
+        /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+        background-size: cover;
+            background-color: #cccccc;
+        }
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    .foto {
+        border-radius: 0px 0px 0px 5px;
+    }
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    .container-login{
+        margin-top: 200px;
+    }
+</style>
+
+    <main class="container mx-auto">
+            <div class="col-xl-8 col-lg-8 p-0 mx-auto container-login">
+                <div class="row">
+                    <div class="col-6 m-0 p-0 bg-secondary border border-dark rounded-left">
+                       
+                        <div class="col-12 p-0">
+                            <img class="mx-auto foto" src="terraza.jpg" width="100%"/>
+                        </div>
+                    </div>
+                    <div class="col-6 m-0 py-5 bg-info border border-dark rounded-right">
+                        <div class="col-12 mx-auto">
+                        <div class="col-12 mx-auto">
+                        <h1 class="h3 mb-3 font-weight-normal">Crear cuenta</h1>
+
+                            {{ form_start(registrationForm) }}
+                            {{ form_widget(registrationForm.email, { 'attr': {'class': 'form-control mb-2', 'placeholder' : 'Correo electronico'}}) }}
+                            {{ form_row(registrationForm.email) }} 
+                            {{ form_widget(registrationForm.plainPassword, { 'attr': {'class': 'form-control mb-2', 'placeholder' : 'Contraseña'}}) }}
+                            {{ form_row(registrationForm.plainPassword) }}
+                            {{ form_row(registrationForm.agreeTerms) }}
+
+                            <br>
+                            <button class="btn btn-lg btn-primary mb-1">Registrarse</button>
+
+                            {{ form_end(registrationForm) }}
+
+                            <p>Ya tengo cuenta <a href="/login">Acceder!</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock %}
