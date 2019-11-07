@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -49,6 +51,27 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $usercity;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $departament;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Allergy", inversedBy="users")
+     */
+    private $allergy_collection;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Company", mappedBy="user")
+     */
+    private $company_collection;
+
+    public function __construct()
+    {
+        $this->allergy_collection = new ArrayCollection();
+        $this->company_collection = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -160,6 +183,75 @@ class User implements UserInterface
     public function setUsercity(?string $usercity): self
     {
         $this->usercity = $usercity;
+
+        return $this;
+    }
+
+    public function getDepartament(): ?string
+    {
+        return $this->departament;
+    }
+
+    public function setDepartament(?string $departament): self
+    {
+        $this->departament = $departament;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Allergy[]
+     */
+    public function getAllergyCollection(): Collection
+    {
+        return $this->allergy_collection;
+    }
+
+    public function addAllergyCollection(Allergy $allergyCollection): self
+    {
+        if (!$this->allergy_collection->contains($allergyCollection)) {
+            $this->allergy_collection[] = $allergyCollection;
+        }
+
+        return $this;
+    }
+
+    public function removeAllergyCollection(Allergy $allergyCollection): self
+    {
+        if ($this->allergy_collection->contains($allergyCollection)) {
+            $this->allergy_collection->removeElement($allergyCollection);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompanyCollection(): Collection
+    {
+        return $this->company_collection;
+    }
+
+    public function addCompanyCollection(Company $companyCollection): self
+    {
+        if (!$this->company_collection->contains($companyCollection)) {
+            $this->company_collection[] = $companyCollection;
+            $companyCollection->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyCollection(Company $companyCollection): self
+    {
+        if ($this->company_collection->contains($companyCollection)) {
+            $this->company_collection->removeElement($companyCollection);
+            // set the owning side to null (unless already changed)
+            if ($companyCollection->getUser() === $this) {
+                $companyCollection->setUser(null);
+            }
+        }
 
         return $this;
     }
