@@ -1,7 +1,7 @@
 $(function() {
     $('select.country').on('change',function() {
 
-        var parameters = $(select.country).val();
+        var parameters = $('select.country').val();
         console.log(parameters)
         $.ajax({
             data: parameters,
@@ -9,8 +9,9 @@ $(function() {
             url: "/getProvincias",
             dataType: "JSON",
             successs: function(result){
-                var item = "<select class='form-control departament'> </select>"
+                var item = "<select class='form-control departament'></select>"
                 $("div.addSelects").append(item);
-            }});
+            }
+        });
     });
 });
