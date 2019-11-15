@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
@@ -37,5 +38,14 @@ class DefaultController extends AbstractController
             }
 
         }
+    }
+
+    /**
+     * @Route("/updateUser", name="updateUser")
+     */
+    public function updateUser()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
     }
 }

@@ -23,14 +23,22 @@
         background-color: #fef5e7;
     }
 
-</style>
+    select.departament {
+       display: none;
+    }
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
-  <script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo="crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
-  <script src="/librerias/js/functions.js"></script>
+    select.city  {
+        display: none;
+    }
+
+</style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo="crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+    <script src="/librerias/js/functions.js"></script>
+
     <main class="container mx-auto">
         <div class="row">
             <div class="col-xl-8 col-lg-8 pb-4 px-5 my-5 mx-auto container-changedata rounded border border-warning bg-orange">
@@ -46,25 +54,29 @@
                 </div>
                 <div class="form">
                         <span class="font-weight-bold mb-3 d-block">Datos personales:</span>
-                        <input type="text" class="form-control my-3 d-block" placeholder="Nombre"/>
-                        <input type="text" class="form-control my-2 d-block" placeholder="Apellidos"/>
+                        <input type="text" class="form-control my-3 d-block name" placeholder="Nombre"/>
+                        <input type="text" class="form-control my-2 d-block lastname" placeholder="Apellidos"/>
 
                         <span class="font-weight-bold mb-3 d-block">Dirección:</span>
-                         <input type="text" class="form-control my-3 d-block" placeholder="Introduzca dirección"/>     
+                         <input type="text" class="form-control my-3 d-block " placeholder="Introduzca dirección"/>
 
                          <select class="form-control my-2 d-block country">
                             <option value="" selected disabled> Seleccione una opcion.. </option>
                             <option value="España"> España </option>
                          </select>
+
+                         <select id='departament' class='form-control my-2 departament'>
+                         </select>
+
+                         <select id='city' class='form-control mt-2 mb-3 city'>
+                         </select>
+
                         <div class="addSelects"></div>
                         <input type="checkbox"/> Acepto la politica de privacidad: <br>
                         <input type="checkbox"/> No acepto la politica de privacidad 
 
-                        <input type="button" class="my-2 btn btn-info d-block" value="Enviar"/>        
+                        <input type="button" class="my-2 btn btn-info d-block updateUser" value="Enviar"/>
                 </div>
-                
-
-                
             </div>
         </div>
     </main>
