@@ -47,5 +47,21 @@ class DefaultController extends AbstractController
     {
         $token = $this->get('security.token_storage')->getToken();
         $user = $token->getUser();
+
+        if(isset($_POST)){
+            $user->setName($_POST['name']);
+            $user->setUserlastname($_POST['lastname']);
+            $user->setAddress($_POST['address']);
+            $user->setPostalCode($_POST['postal_code']);
+            $user->setCountry($_POST['country']);
+            $user->setDepartament($_POST['departament']);
+            $user->setUsercity($_POST['city']);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->merge($user);
+            $manager->flush();
+        }
+
+       return $this->redirectToRoute('index');
+
     }
 }

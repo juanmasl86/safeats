@@ -5,18 +5,26 @@
 {% block body %}
 <style>
     body {
-            background-image: url('fondo3.jpg');
+            /*background-image: url('fondo3.jpg');*/
+            /*background-position: center center;*/
+            /*background-repeat: no-repeat;*/
+            /*!* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido *!*/
+            /*background-attachment: fixed;*/
+            /*!* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador *!*/
+            /*background-size: cover;*/
+            /*background-color: #cccccc;*/
+            background-image: url('wheat.png');
             background-position: center center;
-            background-repeat: no-repeat;
+            background-repeat: repeat;
             /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
-            background-attachment: fixed;
+            /* background-attachment: fixed;*/
             /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
-            background-size: cover;
-            background-color: #cccccc;
+            /*background-size: cover;*/
+              background-color: #cccccc;
         }
 </style>
 
-<div class="example-wrapper">
+<div class="example-wrapper text-white">
     <h1>Hello ! ✅</h1>
     This friendly message is coming from:
     <ul>

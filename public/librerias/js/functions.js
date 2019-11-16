@@ -55,6 +55,63 @@ $(function () {
 
     $('input.updateUser').click(function () {
 
+        var correcto = true;
+        var errores = []
+        var error = ""
+        $('div.errorReport').empty();
+        if ($('input.name').val() == "" || $('input.name').val() == " ") {
+            error = "No puede dejar el campo de nombre vacio.";
+            errores.push(error);
+            correcto = false;
+        }
+        if($('input.lastname').val() == "" || $('input.lastname').val() == " ") {
+            error = "No puede dejar el campo de apellidos vacio.";
+            errores.push(error);
+            correcto = false;
+        }
+        if($('input.address').val() == "" || $('input.address').val() == " ") {
+            error = "No puede dejar el campo de dirección vacio.";
+            errores.push(error);
+            correcto = false;
+        }
+
+        if($('select.country').val() == "" || $('select.departament').val() == "" || $('select.city').val() == ""){
+            error = "No se puede dejar pais, provincia o municipio sin seleccionar";
+            errores.push(error);
+            correcto = false;
+        }
+
+        if(!correcto) {
+            var item = "";
+            var contador = 0;
+
+            errores.forEach(function () {
+               item+="<a class='d-block m-1'>"+errores[contador]+"</a>";
+               contador++
+            });
+
+            $('div.errorReport').append(item);
+
+        } else {
+            $('div.errorReport').empty();
+
+            var updateUserData = {
+                "name" : $('input.name').val(),
+                "lastname" : $('input.lastname').val(),
+                "address" : $('input.address').val(),
+                "postal_code" : parseInt($('input.postalCode').val()),
+                "country" : $('select.country').val(),
+                "departament" : $('select.departament').val(),
+                "city": $('select.city').val(),
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/updateUser",
+                data: updateUserData,
+            });
+        }
+
     });
 
 

@@ -77,6 +77,11 @@ class User implements UserInterface
      */
     private $address;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $postal_code;
+
     public function __construct()
     {
         $this->allergy_collection = new ArrayCollection();
@@ -168,7 +173,7 @@ class User implements UserInterface
 
     public function setName(?string $username): self
     {
-        $this->name = $name;
+        $this->name = $username;
 
         return $this;
     }
@@ -286,6 +291,18 @@ class User implements UserInterface
     public function setAddress(?string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?int
+    {
+        return $this->postal_code;
+    }
+
+    public function setPostalCode(?int $postal_code): self
+    {
+        $this->postal_code = $postal_code;
 
         return $this;
     }
