@@ -19,17 +19,21 @@
         border-radius: 5px 0px 0px 5px;
     }
 
+    .bg-blue {
+        background: #70a5cc;
+    }
+
     .container-login{
-        margin-top: 200px;
+        margin-top: 140px;
     }
 </style>
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
-     <main class="container mx-auto">
+     <main class="container mx-auto mb-5">
             
-            <div class="col-xl-8 col-lg-8 p-0 mx-auto container-login">
+            <div class="col-xl-8 col-lg-8 p-0 mx-auto mb-5 container-login">
                 <div class="row">
                     <div class="col-6 m-0 p-0 bg-secondary border border-dark rounded-left">
                         <!--<div class="col-12 border-bottom border-dark">
@@ -40,7 +44,7 @@
                           <img class="mx-auto foto" src="terraza.jpg" width="100%"/> 
                         </div>
                     </div>
-                    <div class="col-6 m-0 px-3 py-5 bg-info border border-dark rounded-right">
+                    <div class="col-6 m-0 px-3 py-5 bg-blue border border-dark rounded-right">
                         <div class="col-11 mx-auto">
                     <h1 class="h3 mb-3 font-weight-normal">Inicie sesion</h1>
                     <label for="inputEmail" class="sr-only">Email</label>
