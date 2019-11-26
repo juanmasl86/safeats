@@ -17,13 +17,13 @@ class DefaultController extends AbstractController
         $token = $this->get('security.token_storage')->getToken();
         $user = $token->getUser();
 
-        if($user == 'anon.') { //Filtro para los usuarios logueados 
-            
+        if($user == 'anon.') { //Filtro para los usuarios logueados
+
             return $this->redirectToRoute('app_login');
 
         } else {
 
-            if(empty($user->getUsercity())) {
+            if(is_null($user->getUsercity())) {
 
                 return $this->render('default/personaldata.html.twig', [
                     'user' => $user
@@ -49,6 +49,7 @@ class DefaultController extends AbstractController
         $user = $token->getUser();
 
         if(isset($_POST)){
+
             $user->setName($_POST['name']);
             $user->setUserlastname($_POST['lastname']);
             $user->setAddress($_POST['address']);
@@ -59,9 +60,13 @@ class DefaultController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
             $manager->merge($user);
             $manager->flush();
+
+            return "<script>location.reload()</script>";
+        } else {
+            return "error";
         }
 
-       return $this->redirectToRoute('index');
-
     }
+
+
 }

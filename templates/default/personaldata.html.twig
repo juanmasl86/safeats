@@ -31,25 +31,37 @@
         display: none;
     }
 
-</style>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo="crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
-    <script src="/librerias/js/functions.js"></script>
+    footer {
+        width: 100%;
+        position: absolute;
+        bottom: -340px;
+    }
 
+    .select2-container {
+        margin-bottom: 10px;
+    }
+
+    .panel-heading {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border: 1px solid #bee5eb;
+    }
+    .panel-body {
+        border: 1px solid #bee5eb;
+    }
+
+</style>
     <main class="container mx-auto">
         <div class="row">
             <div class="col-xl-8 col-lg-8 pb-4 px-5 my-5 mx-auto container-changedata rounded border border-warning bg-orange">
                 <img class="mx-auto d-block"src="logo2.png"/>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <p class="font-weight-bold">SafEats informativo:</p>
+                <div class="panel panel-info mt-2 mb-4">
+                    <div class="panel-heading rounded-top px-3 py-2 mb-0">
+                        <p class="font-weight-bold mb-0">SafEats informativo:</p>
                     </div>
-                    <div class="panel-body">
-                        <p>Estimado usuario de SafEats.</p>
-                        <p>Para que podamos ofrecerle un buen servicio, usted debe de rellenar sus datos personales. 
+                    <div class="panel-body px-4 py-2 bg-white rounded-bottom">
+                        <p class="mb-2">Estimado usuario de SafEats.</p>
+                        <p class="mb-0">Para que podamos ofrecerle un buen servicio, usted debe de rellenar sus datos personales.</p>
                     </div>
                 </div>
                 <div class="errorReport">

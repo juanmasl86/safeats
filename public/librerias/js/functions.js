@@ -1,4 +1,5 @@
 $(function () {
+    // <------------------------------------- Selec2 provincias y municipios -------------------------------------->
     $('select.country').on('change', function () {
         var parameters = {
             "country": $('select.country').val()
@@ -53,6 +54,8 @@ $(function () {
         });
     });
 
+    // <------------------------------------- Validacion y actualización de datos ------------------------------------->
+
     $('input.updateUser').click(function () {
 
         var correcto = true;
@@ -101,18 +104,25 @@ $(function () {
                 "address" : $('input.address').val(),
                 "postal_code" : parseInt($('input.postalCode').val()),
                 "country" : $('select.country').val(),
-                "departament" : $('select.departament').val(),
-                "city": $('select.city').val(),
+                "departament" : $('span#select2-departament-container').text(),
+                "city": $('span#select2-city-container').text(),
             }
 
             $.ajax({
                 type: "POST",
                 url: "/updateUser",
                 data: updateUserData,
+                success: function (response) {
+                    $('body').append(response);
+                }
             });
         }
 
     });
 
+    // <------------------------------------- Generar perfil en modal -------------------------------------->
 
+    // $('a.profile').click(function () {
+    //
+    // });
 });

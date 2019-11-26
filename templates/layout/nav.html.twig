@@ -1,11 +1,18 @@
 <style>
     .bg-personal {
-        background: #915d58;
+        /*background: #915d58;*/
+        background: #60373c;
+    }
+
+    footer {
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
     }
 </style>
 <nav class="navbar navbar-expand-lg navbar-expand-xl navbar-dark sticky-top bg-personal border border-dark">
     <a class="navbar-brand" href="#" onclick="window.location.href='/'">
-        <img src="logo4.png" style="width: 50%; height: 25%;"/>
+        <img src="logo4.png"/>
     </a>
     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
@@ -30,11 +37,14 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="./areaprivada">{{user.name}}</a>
-                            <a class="dropdown-item" href="./areaprivada/#crearservicio">Crear servicio</a>
-                            <a class="dropdown-item" href="./areaprivada/#enviarmensaje">Enviar mensaje</a>
-                            <a class="dropdown-item" href="./areaprivada/#mensajes">Mensajes</a>
-                            <a class="dropdown-item" href="./editarPerfil">Editar datos</a>
+                            {% if (user.usercity is not empty) %}
+                            <a class="dropdown-item profile" href="./profile" data-toggle="modal" data-target="#myModal">{{user.name}}</a>
+                            <a class="dropdown-item" href="./amigos">Mis alergias</a>
+                            <a class="dropdown-item" href="./enviarmensaje">Favoritos</a>
+                            <a class="dropdown-item" href="./areaprivada/#mensajes">Enviar mensajes</a>
+                            <a class="dropdown-item" href="./editarPerfil">cosas
+                            </a>
+                            {% endif %}
                             <!--ESTO SOLO APARECE SI ERES ADMINISTRADOR-->
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a class="dropdown-item" href="./areaprivada/#administracion">administracion</a>
