@@ -54,6 +54,39 @@
         background: #9cb9cc;
     }
 
+    div.allergy-title{
+        cursor: pointer;
+    }
+
+    div.favorites-title{
+        cursor: pointer;
+    }
+
+    img.allergy {
+        width: 30px;
+        height: 30px;
+    }
+    img.favorites {
+        width: 30px;
+        height: 30px;
+    }
+
+    select.departament {
+        display: none;
+    }
+
+    select.city  {
+        display: none;
+    }
+
+    .select2-container {
+        margin-bottom: 10px;
+    }
+
+    .bg-blue-buttons {
+        background: #2d527c;
+    }
+
 </style>
 
 <div class="container">
@@ -130,7 +163,7 @@
                             <div class="img col-lg-12 justify-content-center d-flex">
                                 <img class="mx-auto" src="user.png" width="150px" height="150px" class="mr-4">
                             </div>
-                            <div class="imgChange col-lg-12 d-flex justify-content-center mx-center"><button type="button" class="btn btn-primary mx-auto">Cambiar</button></div>
+                            <div class="imgChange col-lg-12 d-flex justify-content-center mx-center"><button type="button" class="btn bg-blue-buttons text-white mx-auto">Cambiar</button></div>
                         </div>
                         <div class="col-lg-6 ml-5 pl-5">
                             <a class="font-weight-bold"> Nombre: </a> {{ user.name }}<br>
@@ -141,20 +174,20 @@
                             <a class="font-weight-bold"> Localidad: </a> {{ user.usercity }}<br>
                             <a class="font-weight-bold"> Codigo Postal: </a> {{ user.getPostalCode }}<br>
 
-                            <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#exampleModalCenter">Editar</button>
+                            <button type="button" class="btn bg-blue-buttons text-white my-3" data-toggle="modal" data-target="#exampleModalCenter">Editar</button>
                         </div>
                     </div>
-                        <div class="border-dark border-bottom col-lg-12"><h4> Mis Alergias </h4></div>
-                    <div class="col-lg-12">Proximamente...</div>
+                    <div class="border-dark border-bottom col-lg-12 d-flex allergy-title"><h4 class="col-lg-11"> Mis Alergias </h4><img class="allergy col-lg-1" src="minus.png"/></div>
+                    <div class="col-lg-12 allergy">Proximamente...</div>
 
-                        <div class="border-dark border-bottom col-lg-12"><h4> Favoritos </h4></div>
-                    <div class="col-lg-12">Proximamente...</div>
+                        <div class="border-dark border-bottom col-lg-12 d-flex my-2 favorites-title"><h4 class="col-lg-11"> Favoritos </h4><img class="favorites col-lg-1" src="minus.png"/></div>
+                    <div class="col-lg-12 favorites">Proximamente...</div>
 
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer bg-title">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
 
             </div>
@@ -165,18 +198,37 @@
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <div class="modal-header bg-title">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Editar Perfil</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body bg-body">
+                    <div class="form">
+                        <span class="font-weight-bold mb-3 d-block">Datos personales:</span>
+                        <input type="text" class="form-control my-3 d-block name" placeholder="Nombre"/>
+                        <input type="text" class="form-control my-2 d-block lastname" placeholder="Apellidos"/>
+
+                        <span class="font-weight-bold mb-3 d-block">Dirección:</span>
+                        <input type="text" class="form-control my-3 d-block address" placeholder="Introduzca dirección"/>
+                        <input type="text" class="form-control my-3 d-block postalCode" placeholder="Código postal"/>
+                        <select class="form-control my-2 d-block country">
+                            <option value="" selected disabled> Seleccione una opcion.. </option>
+                            <option value="España"> España </option>
+                        </select>
+
+                        <select id='departament' class='form-control my-2 departament'>
+                        </select>
+
+                        <select id='city' class='form-control mt-2 my-3 city'>
+                        </select>
+
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="modal-footer bg-title">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
                 </div>
             </div>
         </div>

@@ -5,13 +5,15 @@ namespace App\Controller;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
 
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
-     */
+ * @Route("/", name="index")
+ */
     public function index()
     {
         $token = $this->get('security.token_storage')->getToken();
@@ -41,6 +43,37 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @Route("/list_allergys", name="list_allergys")
+     */
+    public function allergysView()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+
+        if($user == 'anon.') { //Filtro para los usuarios logueados
+
+            return $this->redirectToRoute('app_login');
+
+        } else {
+
+            if(is_null($user->getUsercity())) {
+
+                return $this->render('default/personaldata.html.twig', [
+                    'user' => $user
+                ]);
+
+            } else {
+
+                return $this->render('default/allergy.html.twig', [
+                    'user' => $user,
+                ]);
+
+            }
+
+        }
+    }
+
+    /**
      * @Route("/updateUser", name="updateUser")
      */
     public function updateUser()
@@ -61,9 +94,12 @@ class DefaultController extends AbstractController
             $manager->merge($user);
             $manager->flush();
 
-            return "<script>location.reload()</script>";
+            $script = "<script>location.href = './';</script>";
+            return new JsonResponse($script);
+
         } else {
-            return "error";
+            $script = "error al actualizar al usuario.";
+            return new JsonResponse($script);
         }
 
     }

@@ -112,17 +112,39 @@ $(function () {
                 type: "POST",
                 url: "/updateUser",
                 data: updateUserData,
+                dataType: 'json',
                 success: function (response) {
                     $('body').append(response);
+
                 }
             });
         }
 
     });
 
-    // <------------------------------------- Generar perfil en modal -------------------------------------->
+    // <-------------------------------------  Perfil en modal -------------------------------------->
 
-    // $('a.profile').click(function () {
-    //
-    // });
+    // <<----------------------------------------- Efectos ------------------------------------------>
+
+    $('div.allergy-title').click(function () {
+        $('div.allergy').slideToggle(200);
+        if($(this).hasClass("up")) {
+            $(this).removeClass("up");
+            $('img.allergy').attr("src", "minus.png");
+        } else {
+            $(this).addClass("up");
+            $('img.allergy').attr("src", "plus.png");
+        }
+    })
+
+    $('div.favorites-title').click(function () {
+        $('div.favorites').slideToggle(200);
+        if($(this).hasClass("up")) {
+            $(this).removeClass("up");
+            $('img.favorites').attr("src", "minus.png");
+        } else {
+            $(this).addClass("up");
+            $('img.favorites').attr("src", "plus.png");
+        }
+    })
 });
