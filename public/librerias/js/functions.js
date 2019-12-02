@@ -122,8 +122,6 @@ $(function () {
 
     });
 
-    // <-------------------------------------  Perfil en modal -------------------------------------->
-
     // <<----------------------------------------- Efectos ------------------------------------------>
 
     $('div.allergy-title').click(function () {
@@ -135,7 +133,7 @@ $(function () {
             $(this).addClass("up");
             $('img.allergy').attr("src", "plus.png");
         }
-    })
+    });
 
     $('div.favorites-title').click(function () {
         $('div.favorites').slideToggle(200);
@@ -146,5 +144,46 @@ $(function () {
             $(this).addClass("up");
             $('img.favorites').attr("src", "plus.png");
         }
-    })
+    });
+
+    // <------------------------------------- Funciones Menu ADMIDNISTRACION -------------------------------------->
+
+    // <---------------- agregar alergia ------------------->
+    $('div.adminAddAllergy').click(function () {
+        $('section').empty();
+
+        var content = "<h3 class='text-center my-5'>Agregar alergia común</h3>" +
+                      "<div class='error my-2 mx-1'></div>" +
+                      "<input type='text' class='form-control nameAllergy' placeholder='Escribe nombre de la alergia..'/> " +
+                      "<input type='hidden' class='typeAllergy' value='comun'/>";
+        $('section').append(content);
+    });
+
+    // <---------------- agregar alimento ------------------->
+    $('div.adminAddIngredient').click(function () {
+        $('section').empty();
+        var user = "{{ user.name }}";
+        var content = "<h3 class='text-center my-5'>Agregar alimento</h3>" +
+            "<div class='error my-2 mx-1'></div>" +
+            "<div class='col-lg-7 mx-auto'> " +
+                "<input type='text' class='form-control nameIngredient' placeholder='Escribe nombre del alimento..'/> " +
+                "<select class='form-control my-3'>" +
+                    "<option value='0' selected disabled>Seleccione una categoría</option>\n" +
+                    "<option value='Leche y derivados'>Leche y derivados.</option>\n" +
+                    "<option value='Carnes'>Carnes.</option>" +
+                    "<option value='Pescados'>Pescados.</option>" +
+                    "<option value='Mariscos'>Mariscos</option>" +
+                    "<option value='Huevos'>Huevos.</option>" +
+                    "<option value='Verduras y hortalizas'>Verduras y hortalizas.</option>" +
+                    "<option value='Fruta'>Fruta.</option>" +
+                    "<option value='Legumbres'>Legumbres</option>" +
+                    "<option value='Frutos secos'>Frutos secos.</option>" +
+                    "<option value='Cereales y derivados, azúcar y dulces'>Cereales y derivados, azúcar y dulces.</option>" +
+                    "<option value='Grasas, aceites y mantequillas'>Grasas, aceites y mantequillas.</option>" +
+                "</select>" +
+                "<button class='btn btn-info addIngredient'>Añadir</button>" +
+            "</div>";
+        $('section').append(content);
+    });
+
 });

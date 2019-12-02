@@ -38,6 +38,11 @@ class Ingredient
      */
     private $plates;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $idUser;
+
     public function __construct()
     {
         $this->allergies = new ArrayCollection();
@@ -125,6 +130,18 @@ class Ingredient
             $this->plates->removeElement($plate);
             $plate->removeIngredientCollection($this);
         }
+
+        return $this;
+    }
+
+    public function getIdUser(): ?int
+    {
+        return $this->idUser;
+    }
+
+    public function setIdUser(?int $idUser): self
+    {
+        $this->idUser = $idUser;
 
         return $this;
     }

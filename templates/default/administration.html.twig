@@ -1,66 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenido a SafEats!{% endblock %}
+{% block title %}Administracion SafEats!{% endblock %}
 
 {% block body %}
     <link rel="stylesheet" type="text/css" href="./librerias/css/style.css">
-<div class="container">
-    <main>
-        <div class="row">
-            <div class="container-search d-flex justify-content-center mt-5 col-lg-12 font-">
-                <input type="text" class="form-control mr-2 col-lg-9 valueSearch" placeholder="Escriba localidad o nombre de restaurante para filtrar.."/> <button type="button" class="btn personal border col-lg-1">Buscar</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="container-nav col-lg-12 d-flex justify-content-center mt-5 font-weight-bold">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-        <div class="container-restaurants" style="height: 350px;">
+    <main class="container mx-auto d-flex flex-wrap">
+        <h1 class="text-white mx.auto col-lg-12"> admin </h1>
+        <aside class="col-lg-3 d-block mx-auto p-2">
+            <div class="my-2  p-3 font-weight-bold border border-danger rounded bg-buttons button adminAddAllergy">Agregar alergia común</div>
+            <div class="my-2 p-3 font-weight-bold border border-danger rounded bg-buttons button adminAddIngredient">Añadir alimentos</div>
+            <div class="my-2  p-3 font-weight-bold border border-danger rounded bg-buttons button adminCheckContent">Revisar contenido</div>
+            <div class="my-2 p-3 font-weight-bold border border-danger rounded bg-buttons button adminSupport">Buzon incidencias</div>
+            <div class="my-2 p-3 font-weight-bold border border-danger rounded bg-buttons button adminManageUsers">Gestionar usuarios</div>
+        </aside>
+        <section class="col-lg-8 d-block border border-danger rounded bg-section mx-auto" style="min-height: 550px;">
+                <img class="mx-auto d-block"src="logo2.png"/>
+                <div class="panel panel-info mt-2 mb-4">
+                    <div class="panel-heading rounded-top px-3 py-2 mb-0">
+                        <p class="font-weight-bold mb-0">SafEats informativo:</p>
+                    </div>
+                    <div class="panel-body px-4 py-2 bg-white rounded-bottom">
+                        <p class="mb-2">Estimado administrador de SafEats.</p>
+                        <p class="mb-1">Le recordamos que el funcionamiento del área de administración es sencillo.</p>
+                        <p class="mb-1">El contenido de las diferentes opciones se cargará en esta sección.</p>
+                        <p class="mb-1">Se ha de administrar siempre intentando que el usuario final se encuentre de lo más cómodo posible.</p>
+                        <p class="mb-0">Al revisar el contenido debemos de verificar que todo está correcto si hay contenido no apropiado en el sitio web se dará avisos al usuario que añade dicho contenido, finalmente si es reiterado se tomarán acciones más estrictas con dicho usuario.</p>
+                    </div>
+                </div>
+        </section>
 
-        </div>
-        <div class="container-nav col-lg-12 d-flex justify-content-center font-weight-bold">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+
     </main>
 
-    <!-- The Modal -->
+    <!-- The Modal Perfil-->
     <div class="modal fade" id="myModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -104,7 +76,7 @@
                         {% endif %}
                     </div>
 
-                        <div class="border-dark border-bottom col-lg-12 d-flex my-2 favorites-title"><h4 class="col-lg-11"> Favoritos </h4><img class="favorites col-lg-1" src="minus.png"/></div>
+                    <div class="border-dark border-bottom col-lg-12 d-flex my-2 favorites-title"><h4 class="col-lg-11"> Favoritos </h4><img class="favorites col-lg-1" src="minus.png"/></div>
                     <div class="col-lg-12 favorites">Proximamente...</div>
 
                 </div>
@@ -118,7 +90,7 @@
         </div>
     </div>
 
-    <!-- Editar Perfil -->
+    <!-- Modal Edit perfil-->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -129,20 +101,6 @@
                     </button>
                 </div>
                 <div class="modal-body bg-body">
-                    {% if is_granted('ROLE_USER') %}
-                    <div class="panel panel-info mt-2 mb-4">
-                        <div class="panel-heading rounded-top px-3 py-2 mb-0">
-                            <p class="font-weight-bold mb-0">SafEats informativo:</p>
-                        </div>
-                        <div class="panel-body px-4 py-2 bg-white rounded-bottom">
-                            <p class="mb-2 font-weight-bold">¿Es usted el dueño o responsable de un local de restauración?</p>
-                            <p class="mb-2">Si es asi escriba ACTIVAR en la siguiente caja de texto para poder empezar a registrar su negocio en nuestro sitio WEB.</p>
-                            <p class="mb-2">Sus clientes se lo agradecerán y porsupuesto nosotros también.</p>
-                            <span class="font-weight-bold mb-3 d-block">Obtener permisos:</span>
-                            <input type="text" class="form-control my-3 d-block permisos" placeholder="ACT...."/>
-                        </div>
-                    </div>
-                    {% endif %}
                     <div class="form">
                         <span class="font-weight-bold mb-3 d-block">Datos personales:</span>
                         <input type="text" class="form-control my-3 d-block name" placeholder="Nombre"/>
@@ -162,8 +120,6 @@
                         <select id='city' class='form-control mt-2 my-3 city'>
                         </select>
 
-
-
                     </div>
                 </div>
                 <div class="modal-footer bg-title">
@@ -173,5 +129,4 @@
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

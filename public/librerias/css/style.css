@@ -1,0 +1,125 @@
+body {
+    background-image: url('../../../dark_wood.png');
+    /*background-position: center center;*/
+    /*background-repeat: no-repeat;*/
+    /*!* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido *!*/
+    /*background-attachment: fixed;*/
+    /*!* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador *!*/
+    /*background-size: cover;*/
+    /*background-color: #cccccc;*/
+    /*background-image: url('../../../wheat.png');*/
+    background-position: center center;
+    background-repeat: repeat;
+    /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+    /* background-attachment: fixed;*/
+    /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+    /*background-size: cover;*/
+    background-color: #cccccc;
+}
+
+.page-link {
+    background: #ccbdad;
+    color: #1e3345;
+}
+
+input.valueSearch {
+    background: #ccbdad;
+    color: #1e3345;
+}
+
+.personal {
+    background: #60373c;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF!important;
+}
+
+button.personal:hover {
+    background: #ccbdad;
+    color: #60373c;
+    border: 2px solid #60373c!important;
+}
+
+.bg-title {
+    background: #7c8e4f;
+    color: #fffdf4;
+}
+
+.bg-body {
+    background: #9cb9cc;
+}
+
+div.allergy-title{
+    cursor: pointer;
+}
+
+div.favorites-title{
+    cursor: pointer;
+}
+
+img.allergy {
+    width: 30px;
+    height: 30px;
+}
+img.favorites {
+    width: 30px;
+    height: 30px;
+}
+
+select.departament {
+    display: none;
+}
+
+select.city  {
+    display: none;
+}
+
+.select2-container {
+    margin-bottom: 10px;
+}
+
+.bg-blue-buttons {
+    background: #2d527c;
+}
+
+.bg-section {
+    background: #ffeccc;
+}
+
+.bg-buttons {
+    background: burlywood;
+}
+
+.button:hover {
+    background: #915c6e;
+    color: #FFF;
+    cursor: pointer;
+}
+
+img.aComun {
+    width: 60px;
+    height: 60px;
+}
+
+img.aPersonal {
+    width: 50px;
+    height: 50px;
+}
+
+div.aComun:hover {
+    background: darksalmon;
+    cursor: pointer;
+}
+
+div.aPersonal:hover {
+    background: darksalmon;
+    cursor: pointer;
+}
+
+.panel-heading {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+}
+.panel-body {
+    border: 1px solid #bee5eb;
+}

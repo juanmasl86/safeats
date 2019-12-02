@@ -33,6 +33,11 @@ class Allergy
      */
     private $ingredient_collection;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $type;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -106,6 +111,18 @@ class Allergy
         if ($this->ingredient_collection->contains($ingredientCollection)) {
             $this->ingredient_collection->removeElement($ingredientCollection);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

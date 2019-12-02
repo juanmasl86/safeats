@@ -82,11 +82,6 @@ class User implements UserInterface
      */
     private $postal_code;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $manager;
-
     public function __construct()
     {
         $this->allergy_collection = new ArrayCollection();
@@ -125,16 +120,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        //Comprobamos que el correo sea el del administrador, si lo es, le administramos el rol de administrador
-        if($this->getUsername()=="admin@gmail.com"){
-            $roles = $this->roles;
-            $roles[] = 'ROLE_SUPER_ADMIN';
-        }else {
-            $roles = $this->roles;
-            // guarantee every user at least has ROLE_USER
-            $roles[] = 'ROLE_USER';
-        }
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -317,15 +303,4 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getManager(): ?bool
-    {
-        return $this->manager;
-    }
-
-    public function setManager(?bool $manager): self
-    {
-        $this->manager = $manager;
-
-        return $this;
-    }
 }

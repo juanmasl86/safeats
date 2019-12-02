@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -74,11 +75,28 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @Route("/administracion", name="administracion")
+     */
+    public function adminView()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+
+
+                return $this->render('default/administration.html.twig', [
+                    'user' => $user
+                ]);
+
+
+    }
+
+    /**
      * @Route("/updateUser", name="updateUser")
      */
     public function updateUser()
     {
         $token = $this->get('security.token_storage')->getToken();
+
         $user = $token->getUser();
 
         if(isset($_POST)){
@@ -90,6 +108,7 @@ class DefaultController extends AbstractController
             $user->setCountry($_POST['country']);
             $user->setDepartament($_POST['departament']);
             $user->setUsercity($_POST['city']);
+            $user->setRoles(["ROLE_USER"]);
             $manager = $this->getDoctrine()->getManager();
             $manager->merge($user);
             $manager->flush();
