@@ -26,7 +26,7 @@ class Company
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $adress;
+    private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -70,14 +70,14 @@ class Company
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adress;
+        return $this->address;
     }
 
-    public function setAdress(?string $adress): self
+    public function setAddress(?string $address): self
     {
-        $this->adress = $adress;
+        $this->address = $address;
 
         return $this;
     }

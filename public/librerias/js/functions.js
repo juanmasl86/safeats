@@ -154,20 +154,51 @@ $(function () {
 
         var content = "<h3 class='text-center my-5'>Agregar alergia común</h3>" +
                       "<div class='error my-2 mx-1'></div>" +
-                      "<input type='text' class='form-control nameAllergy' placeholder='Escribe nombre de la alergia..'/> " +
+                      "<input type='text' class='form-control nameAllergy col-lg-8 mx-auto' placeholder='Escribe nombre de la alergia..'/> " +
                       "<input type='hidden' class='typeAllergy' value='comun'/>";
-        $('section').append(content);
+
+        $.ajax({
+            url: "/getIngredients",
+            dataType: "JSON",
+            success: function (response) {
+                var contador = 0;
+                var categorias = response[1];
+                var ingredients = response[0];
+
+                console.log(categorias[0]["category"]);
+                console.log(ingredients[0]["category"]);
+                console.log(categorias, ingredients);
+                if(categorias.length != 0 && ingredients.length != 0) {
+                    categorias.forEach(function () {
+                        content += "<div class='categoria border-bottom border-dark my-2'><h5>" +categorias[contador]["category"]+"</h5></div>" +
+                                    "<div class='ingredients d-flex flex-wrap col-lg-12'></div>";
+                        var contador2 = 0;
+                             ingredients.forEach(function () {
+                                 if (ingredients[contador2]["category"] == categorias[contador]["category"]) {
+                                 content += "<div class='Ingrecheck col-lg-3 mx-3 d-block'><input type='checkbox' value='"+ingredients[contador2]["id"]+"'/> "+ingredients[contador2]["name"] +"</div>";
+                                 }
+                                 contador2++;
+                             });
+                        content += "</div>";
+                        contador++;
+                    });
+                }
+                $('section').append(content);
+            }
+        });
+
+
     });
 
     // <---------------- agregar alimento ------------------->
     $('div.adminAddIngredient').click(function () {
         $('section').empty();
         var user = "{{ user.name }}";
-        var content = "<h3 class='text-center my-5'>Agregar alimento</h3>" +
+        var content = "<h3 class='text-center mt-5 mb-4'>Agregar alimento</h3>" +
             "<div class='error my-2 mx-1'></div>" +
             "<div class='col-lg-7 mx-auto'> " +
                 "<input type='text' class='form-control nameIngredient' placeholder='Escribe nombre del alimento..'/> " +
-                "<select class='form-control my-3'>" +
+                "<select class='form-control my-3 catIngredient'>" +
                     "<option value='0' selected disabled>Seleccione una categoría</option>\n" +
                     "<option value='Leche y derivados'>Leche y derivados.</option>\n" +
                     "<option value='Carnes'>Carnes.</option>" +
@@ -186,4 +217,48 @@ $(function () {
         $('section').append(content);
     });
 
+    //<----- llamada a la funcion para añadir el alimento----->
+
+    $("body").on("click", "button.addIngredient", function () {
+        addNewIngredient();
+    });
+
+
+
 });
+
+function addNewIngredient(){
+        $("div.error").empty();
+    if($("input.nameIngredient").val() == "" || $("input.nameIngredient").val() == " ") {
+        $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> No se puede dejar el nombre vacio o con espacios en blanco.</div>")
+        return;
+    } else {
+        if($("select.catIngredient > option:selected").val() == 0) {
+            $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> Ha de seleccionar una categoria. </div>")
+        return;
+        } else {
+            var parameters = {
+                "nameIngredient" : $("input.nameIngredient").val(),
+                "categoryIngredient" : $("select.catIngredient").val()
+            }
+
+            $.ajax({
+                data:parameters,
+                url: "/addIngredient",
+                method: "POST",
+                dataType:"JSON",
+                success: function (response) {
+                    console.log(response);
+                    if(response.correcto == true){
+                        $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                    } else {
+                        $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                    }
+                }
+            });
+            console.log(parameters);
+        }
+    }
+
+
+}

@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use App\Entity\Ingredient;
 class QuerysController extends AbstractController
 {
     /**
@@ -34,9 +34,9 @@ class QuerysController extends AbstractController
     /**
      * @Route("/getCities", name="getCities")
      */
-    public function getCities()
-    {
-        if(isset($_POST['departamentId'])) {
+        public function getCities()
+        {
+            if(isset($_POST['departamentId'])) {
 
                 $em =$this->getDoctrine()->getEntityManager();
                 $con = $em->getConnection();
@@ -46,11 +46,51 @@ class QuerysController extends AbstractController
 
                 return new JsonResponse($stmt->fetchAll());
 
+            } else {
+                return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
+            }
+
+        }
+
+    /**
+     * @Route("/getIngredients", name="getIngredients")
+     */
+    public function getIngredients()
+    {
+        $arrayIngredients = [];
+        $ingredients =[];
+        $repositoryIngredients = $this->getDoctrine()->getRepository(Ingredient::class);
+        $all_ingredients = $repositoryIngredients->findAll();
+        $size = count($all_ingredients);
+        if($size != 0 ) {
+            foreach ($all_ingredients as $ingredient) {
+                $ingredientArray = [
+                    "id" => $ingredient->getId(),
+                    "name" => $ingredient->getName(),
+                    "category" => $ingredient->getCategory(),
+                    "idUser" => $ingredient->getIdUser(),
+                ];
+
+                array_push($ingredients, $ingredientArray);
+            }
+            array_push($arrayIngredients, $ingredients);
+
+            $em =$this->getDoctrine()->getEntityManager();
+            $con = $em->getConnection();
+            $sql = 'SELECT DISTINCT category 
+                    FROM ingredient 
+                    ORDER BY category ASC';
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+
+            array_push($arrayIngredients, $stmt->fetchAll());
+
+            return new JsonResponse($arrayIngredients);
+
         } else {
             return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
         }
 
     }
-
 
 }

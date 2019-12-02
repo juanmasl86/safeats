@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ingredient;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -96,7 +97,6 @@ class DefaultController extends AbstractController
     public function updateUser()
     {
         $token = $this->get('security.token_storage')->getToken();
-
         $user = $token->getUser();
 
         if(isset($_POST)){
