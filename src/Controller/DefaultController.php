@@ -92,36 +92,34 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/updateUser", name="updateUser")
-     */
-    public function updateUser()
+ * @Route("/empresas", name="empresas")
+ */
+    public function empresasView()
     {
         $token = $this->get('security.token_storage')->getToken();
         $user = $token->getUser();
 
-        if(isset($_POST)){
 
-            $user->setName($_POST['name']);
-            $user->setUserlastname($_POST['lastname']);
-            $user->setAddress($_POST['address']);
-            $user->setPostalCode($_POST['postal_code']);
-            $user->setCountry($_POST['country']);
-            $user->setDepartament($_POST['departament']);
-            $user->setUsercity($_POST['city']);
-            $user->setRoles(["ROLE_USER"]);
-            $manager = $this->getDoctrine()->getManager();
-            $manager->merge($user);
-            $manager->flush();
+        return $this->render('default/empresas.html.twig', [
+            'user' => $user
+        ]);
 
-            $script = "<script>location.href = './';</script>";
-            return new JsonResponse($script);
-
-        } else {
-            $script = "error al actualizar al usuario.";
-            return new JsonResponse($script);
-        }
 
     }
 
+    /**
+     * @Route("/contacto", name="contacto")
+*/
+    public function contactoView()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+
+        return $this->render('default/contacto.html.twig', [
+            'user' => $user
+        ]);
+
+
+    }
 
 }

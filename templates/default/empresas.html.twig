@@ -1,64 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenido a SafEats!{% endblock %}
+{% block title %}SafEats!{% endblock %}
 
 {% block body %}
     <link rel="stylesheet" type="text/css" href="./librerias/css/style.css">
-<div class="container">
-    <main>
+    <main class="container mx-auto">
         <div class="row">
-            <div class="container-search d-flex justify-content-center mt-5 col-lg-12 font-">
-                <input type="text" class="form-control mr-2 col-lg-9 valueSearch" placeholder="Escriba localidad o nombre de restaurante para filtrar.."/> <button type="button" class="btn personal border col-lg-1">Buscar</button>
+            <div class="col-xl-8 col-lg-8 pb-4 px-5 my-5 mx-auto container-changedata rounded border border-warning bg-orange">
+                <img class="mx-auto d-block"src="logo2.png"/>
+                <h1>EMPRESASSSSSS</h1>
             </div>
-        </div>
-        <div class="row">
-            <div class="container-nav col-lg-12 d-flex justify-content-center mt-5 font-weight-bold">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-        <div class="container-restaurants" style="height: 350px;">
-
-        </div>
-        <div class="container-nav col-lg-12 d-flex justify-content-center font-weight-bold">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </main>
+
+
+
+
 
     <!-- The Modal -->
     <div class="modal fade" id="myModal">
@@ -104,7 +61,7 @@
                         {% endif %}
                     </div>
 
-                        <div class="border-dark border-bottom col-lg-12 d-flex my-2 favorites-title"><h4 class="col-lg-11"> Favoritos </h4><img class="favorites col-lg-1" src="minus.png"/></div>
+                    <div class="border-dark border-bottom col-lg-12 d-flex my-2 favorites-title"><h4 class="col-lg-11"> Favoritos </h4><img class="favorites col-lg-1" src="minus.png"/></div>
                     <div class="col-lg-12 favorites">Proximamente...</div>
 
                 </div>
@@ -130,18 +87,18 @@
                 </div>
                 <div class="modal-body bg-body">
                     {% if is_granted('ROLE_USER') %}
-                    <div class="panel panel-info mt-2 mb-4">
-                        <div class="panel-heading rounded-top px-3 py-2 mb-0">
-                            <p class="font-weight-bold mb-0">SafEats informativo:</p>
+                        <div class="panel panel-info mt-2 mb-4">
+                            <div class="panel-heading rounded-top px-3 py-2 mb-0">
+                                <p class="font-weight-bold mb-0">SafEats informativo:</p>
+                            </div>
+                            <div class="panel-body px-4 py-2 bg-white rounded-bottom">
+                                <p class="mb-2 font-weight-bold">¿Es usted el dueño o responsable de un local de restauración?</p>
+                                <p class="mb-2">Si es asi escriba ACTIVAR en la siguiente caja de texto y Guarde los cambios para poder empezar a registrar su negocio en nuestro sitio WEB.</p>
+                                <p class="mb-2">Sus clientes se lo agradecerán y por supuesto nosotros también.</p>
+                                <span class="font-weight-bold mb-3 d-block">Obtener permisos:</span>
+                                <input type="text" class="form-control my-3 d-block permisos" placeholder="ACT...."/>
+                            </div>
                         </div>
-                        <div class="panel-body px-4 py-2 bg-white rounded-bottom">
-                            <p class="mb-2 font-weight-bold">¿Es usted el dueño o responsable de un local de restauración?</p>
-                            <p class="mb-2">Si es asi escriba ACTIVAR en la siguiente caja de texto y Guarde los cambios para poder empezar a registrar su negocio en nuestro sitio WEB.</p>
-                            <p class="mb-2">Sus clientes se lo agradecerán y por supuesto nosotros también.</p>
-                            <span class="font-weight-bold mb-3 d-block">Obtener permisos:</span>
-                            <input type="text" class="form-control my-3 d-block permisos" placeholder="ACT...."/>
-                        </div>
-                    </div>
                     {% endif %}
                     <div class="errorEdit"></div>
                     <div class="form">
@@ -174,5 +131,5 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 {% endblock %}

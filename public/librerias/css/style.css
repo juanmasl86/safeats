@@ -123,3 +123,11 @@ div.aPersonal:hover {
 .panel-body {
     border: 1px solid #bee5eb;
 }
+
+.container-changedata {
+    background-color: #fff;
+}
+
+.bg-orange {
+    background-color: #fef5e7;
+}

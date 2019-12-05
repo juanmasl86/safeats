@@ -12,7 +12,7 @@ $(function () {
             dataType: 'json',
             success: function(response) {
                 var contador = 0;
-                var items = "<option value='' selected disabled>Seleciona una provincia...</option>";
+                var items = "<option value='0' selected disabled>Seleciona una provincia...</option>";
                 console.log(response);
                 $('select.departament').empty();
                 response.forEach(function() {
@@ -39,7 +39,7 @@ $(function () {
             success: function (response) {
                 var contador = 0;
 
-                var items ="<option value='' selected disabled>Seleciona una localidad...</option>";
+                var items ="<option value='0' selected disabled>Seleciona una localidad...</option>";
                 console.log(response);
                 $('select.city').empty();
                 response.forEach(function () {
@@ -78,7 +78,7 @@ $(function () {
             correcto = false;
         }
 
-        if($('select.country').val() == "" || $('select.departament').val() == "" || $('select.city').val() == ""){
+        if($('select.country > option:selected').val() == "" || $('select.departament > option:selected').val() == "" || $('select.city > option:selected').val() == ""){
             error = "No se puede dejar pais, provincia o municipio sin seleccionar";
             errores.push(error);
             correcto = false;
@@ -223,8 +223,156 @@ $(function () {
         addNewIngredient();
     });
 
+    //<---------------------------------- Añadir una incidencia ------------------------------------->
+    $("input.addIssue").click(function () {
+        $(this).attr('disabled', true);
+        if ($('input.emailIssue').val() == " " || $('input.emailIssue').val() == "" || $('input.titleIssue').val() == "" || $('input.titleIssue').val() == " " || $('textarea.issueReport').val() == "" || $('textarea.issueReport').val() == " ") {
+            $('div.errorReport').empty();
+            $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> No se pueden mandar los campos de texto vacios </div>");
+            $(this).attr('disabled', false);
+        } else {
+            if($('input.emailIssue').val().indexOf('@', 0) == -1 || $('input.emailIssue').val().indexOf('.', 0) == -1) {
+                $('div.errorReport').empty();
+                $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> Debe introducir un email valido </div>");
+                $(this).attr('disabled', false);
+            } else {
+                if ($('select.issueCategory > option:selected').val() == 0 ) {
+                    $('div.errorReport').empty();
+                    $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> Debe seleccionar una categoria </div>");
+                    $(this).attr('disabled', false);
+                } else {
+                    var parameter = {
+                        "email": $('input.emailIssue').val(),
+                        "title": $('input.titleIssue').val(),
+                        "category": $('select.issueCategory > option:selected').val(),
+                        "issueReport": $('textarea.issueReport').val(),
+                    }
+
+                    $.ajax({
+                        data: parameter,
+                        url: "/addIssue",
+                        method: "POST",
+                        dataType: "JSON",
+                        success: function (response) {
+                            if(response.correcto == true){
+                                $('div.errorReport').empty();
+                                $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                            } else {
+                                $('div.errorReport').empty();
+                                $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                            }
+                            console.log(response);
+                            $(this).attr('disabled', false);
+                        }
+                    }) ;
 
 
+                }
+            }
+
+        }
+    });
+
+
+//<---------------------------------------------  Editar usuario por campos -------------------------------------------------->
+    $("button.editProfile").click(function () {
+        $('div.errorEdit').empty();
+    });
+
+    $("button.editPersonalData").click(function () {
+        $(this).attr('disabled', true);
+        $('div.errorEdit').empty();
+        console.log($("input.role").val());
+
+        var parameters = {
+            "permisos": "",
+            "name": "",
+            "lastName": "",
+            "address": "",
+            "postalCode": "",
+            "country": "",
+            "departament":"",
+            "city": ""
+        };
+        console.log("test");
+
+       if($('input.permisos').val() == "ACTIVAR") {
+           parameters["permisos"] = "ACTIVAR";
+           console.log(parameters["permisos"]);
+       }
+
+       if($('input.name').val() != "" && $('input.name').val() != " ") {
+           parameters["name"] = $('input.name').val();
+       }
+
+        if($('input.lastname').val() != "" && $('input.lastname').val() != " ") {
+            parameters["lastName"] = $('input.lastname').val();
+        }
+
+        if($('input.address').val() != "" && $('input.address').val() != " ") {
+            parameters["address"] = $('input.address').val();
+        }
+
+        if($('input.postalCode').val() != "" && $('input.postalCode').val() != " ") {
+            parameters["postalCode"] = $('input.postalCode').val();
+        }
+
+        if($('select.country > option:selected').val() != 0 && $('select.departament > option:selected').val() != 0 && $('select.city > option:selected').val() != 0){
+
+            parameters["country"] = $('select.country').val();
+            parameters["departament"] = $('span#select2-departament-container').text();
+            parameters["city"] = $('span#select2-city-container').text();
+        }
+
+       if($('select.country > option:selected').val() == 0 && ($('input.postalCode').val() == "" || $('input.postalCode').val() == " ") && ($('input.address').val() == "" || $('input.address').val() == " ") && ($('input.lastname').val() == "" || $('input.lastname').val() == " ") && ($('input.name').val() == "" || $('input.name').val() == " ") && $('input.permisos').val() != "ACTIVAR") {
+           $('div.errorEdit').append("<div class='col-lg-12 my-3 alert alert-danger'>Pero que haces GILIPOLLAS!!!</div>")
+           console.log("Pero que haces GILIPOLLAS!!!");
+       } else {
+            if($("input.role").val() == "ROLE_SUPER_USER" || $("input.role").val() == "ROLE_ADMIN") {
+                if($('select.country > option:selected').val() == 0 && ($('input.postalCode').val() == "" || $('input.postalCode').val() == " ") && ($('input.address').val() == "" || $('input.address').val() == " ") && ($('input.lastname').val() == "" || $('input.lastname').val() == " ") && ($('input.name').val() == "" || $('input.name').val() == " ")) {
+                    $('div.errorEdit').append("<div class='col-lg-12 my-3 alert alert-danger'>Pero que haces GILIPOLLAS!!!</div>")
+                    console.log("Pero que haces GILIPOLLAS!!!");
+                } else {
+                    $.ajax({
+                        data: parameters,
+                        url: "/editUser",
+                        method: "POST",
+                        dataType: "JSON",
+                        success: function (response) {
+                            if(response.correcto == true){
+                                $('div.errorEdit').empty();
+                                $('div.errorEdit').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                            } else {
+                                $('div.errorEdit').empty();
+                                $('div.errorEdit').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                            }
+                            console.log(response);
+                            $(this).attr('disabled', false);
+                        }
+                    }) ;
+                }
+            } else {
+            $.ajax({
+                data: parameters,
+                url: "/editUser",
+                method: "POST",
+                dataType: "JSON",
+                success: function (response) {
+                    if(response.correcto == true){
+                        $('div.errorEdit').empty();
+                        $('div.errorEdit').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                    } else {
+                        $('div.errorEdit').empty();
+                        $('div.errorEdit').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                    }
+                    console.log(response);
+                    $(this).attr('disabled', false);
+                }
+            }) ;
+            }
+       }
+
+    });
 });
 
 function addNewIngredient(){
