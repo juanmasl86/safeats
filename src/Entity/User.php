@@ -82,6 +82,16 @@ class User implements UserInterface
      */
     private $postal_code;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $privacy;
+
     public function __construct()
     {
         $this->allergy_collection = new ArrayCollection();
@@ -299,6 +309,30 @@ class User implements UserInterface
     public function setPostalCode(?int $postal_code): self
     {
         $this->postal_code = $postal_code;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getPrivacy(): ?bool
+    {
+        return $this->privacy;
+    }
+
+    public function setPrivacy(?bool $privacy): self
+    {
+        $this->privacy = $privacy;
 
         return $this;
     }

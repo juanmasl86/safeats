@@ -42,7 +42,7 @@
             </div>
         </div>
     </main>
-    {% if (user is defined) and (user != 'anon.') %}
+    {% if (user is defined) and (user.getRoles is not empty) %}
     <!-- The Modal Perfil-->
     <div class="modal fade" id="myModal">
         <div class="modal-dialog modal-lg">
@@ -81,7 +81,7 @@
                         {% if collection is empty %}
                             <a>No tiene alergias agregadas.</a>
                         {% else %}
-                            {% for collection in allergy %}
+                            {% for allergy in collection %}
                                 {{ allergy.name }}
                             {% endfor %}
                         {% endif %}

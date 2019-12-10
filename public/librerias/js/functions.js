@@ -78,8 +78,20 @@ $(function () {
             correcto = false;
         }
 
+        if($('input.postalCode').val() == "" || $('input.postalCode').val() == " " || !(/^(?:0?[1-9]|[1-4]\d|5[0-2])\d{3}$/.test($('input.postalCode').val()))) {
+            error = "No puede dejar el campo código postal vacio o introducir letras max de cifras de 5 numeros y min de 3.";
+            errores.push(error);
+            correcto = false;
+        }
+
         if($('select.country > option:selected').val() == "" || $('select.departament > option:selected').val() == "" || $('select.city > option:selected').val() == ""){
-            error = "No se puede dejar pais, provincia o municipio sin seleccionar";
+            error = "No se puede dejar pais, provincia o municipio sin seleccionar.";
+            errores.push(error);
+            correcto = false;
+        }
+
+        if(! $('input.privacy').prop('checked') ) {
+            error = "Ha de acceptar la politica de privacidad.";
             errores.push(error);
             correcto = false;
         }
@@ -89,7 +101,7 @@ $(function () {
             var contador = 0;
 
             errores.forEach(function () {
-               item+="<a class='d-block m-1'>"+errores[contador]+"</a>";
+               item+="<a class='d-block alert alert-danger m-1'>"+errores[contador]+"</a>";
                contador++
             });
 
@@ -124,6 +136,8 @@ $(function () {
 
     // <<----------------------------------------- Efectos ------------------------------------------>
 
+    // ------------------------------------ Toggle más icon change userprofile-----------------------------------------
+
     $('div.allergy-title').click(function () {
         $('div.allergy').slideToggle(200);
         if($(this).hasClass("up")) {
@@ -146,9 +160,19 @@ $(function () {
         }
     });
 
+    // ------------------------------------ Toggle Add allergy category-----------------------------------------
+
+    $("body").on("click", "div.categoria", function () {
+       $(this).next(".ingredients").slideToggle(200);
+    });
+
+
+
+
+
     // <------------------------------------- Funciones Menu ADMIDNISTRACION -------------------------------------->
 
-    // <---------------- agregar alergia ------------------->
+    // <---------------- INPRIMIR ELEMENTOS PARA AÑADIR ALERGIA COMUN ------------------->
     $('div.adminAddAllergy').click(function () {
         $('section').empty();
 
@@ -165,29 +189,131 @@ $(function () {
                 var categorias = response[1];
                 var ingredients = response[0];
 
-                console.log(categorias[0]["category"]);
-                console.log(ingredients[0]["category"]);
-                console.log(categorias, ingredients);
                 if(categorias.length != 0 && ingredients.length != 0) {
                     categorias.forEach(function () {
                         content += "<div class='categoria border-bottom border-dark my-2'><h5>" +categorias[contador]["category"]+"</h5></div>" +
-                                    "<div class='ingredients d-flex flex-wrap col-lg-12'></div>";
+                                    "<div class='ingredients col-lg-12'><div class='row row-cols-3'>";
                         var contador2 = 0;
                              ingredients.forEach(function () {
                                  if (ingredients[contador2]["category"] == categorias[contador]["category"]) {
-                                 content += "<div class='Ingrecheck col-lg-3 mx-3 d-block'><input type='checkbox' value='"+ingredients[contador2]["id"]+"'/> "+ingredients[contador2]["name"] +"</div>";
+                                 content += "<div class='Ingrecheck col'><input type='checkbox' value='"+ingredients[contador2]["id"]+"'/> "+ingredients[contador2]["name"] +"</div>";
                                  }
                                  contador2++;
                              });
-                        content += "</div>";
+                        content += "</div></div>";
                         contador++;
                     });
+
+                    content += "<div class='col-lg-12 d-flex'><button class='col-lg-3 ml-auto my-3 btn btn-info addAllergyComun'>Añadir alergia</button></div>"
                 }
                 $('section').append(content);
             }
         });
+    });
+
+    //<----------------- AJAX ENVIO DATOS PARA ADD NEW ALLERGY COMÚN ----------------->
+
+    $("body").on("click", "button.addAllergyComun", function () {
+        $('div.error').empty();
+        var checked = [];
+        $("input[type='checkbox']:checked").each(function () {
+            checked.push(parseInt($(this).val()));
+        })
+        console.log(checked);
+        if(checked.length == 0) {
+            var error = "Debe seleccionar al menos un ingrediente";
+            $('div.error').append(error);
+        } else {
+            if ($("input.nameAllergy").val() == " " || $("input.nameAllergy").val() == "") {
+                var error = "Debe ponerle un nombre a la alergia común";
+                $('div.error').append(error);
+            } else {
+                var parameters = {
+                    "allergyName": $("input.nameAllergy").val(),
+                    "allergyType": "comun",
+                    "allergyIngredients": checked,
+                }
+
+                $.ajax({
+                    data: parameters,
+                    url: "/addAllergy",
+                    method: "POST",
+                    dataType: "JSON",
+                    success: function (response) {
+                        if(response.correcto == true){
+                            $('div.error').empty();
+                            $('div.error').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                        } else {
+                            $('div.error').empty();
+                            $('div.error').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                        }
+                    }
+                });
+            }
+        }
 
 
+    });
+    // <---------------- buzon administracion ------------------->
+
+    $("body").on("click", "div.adminSupport", function () {
+        $('section').empty();
+        $.ajax({
+            url: "/getIssues",
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response);
+                var content = "<div class='container-issues p-4'>";
+                var contador = 0;
+                response.forEach(function () {
+                    var d = new Date(response[contador]["timecreated"] * 1000);
+                    var fCreated = d.toLocaleString();
+                    response[contador]["timecreated"]
+                    if (response[contador]["read"] == false) {
+                    content += "<div class='issueTitle col-lg-12 alert alert-success p-2 mb-0'>" +
+                        "<a class='title'><strong>Asunto:</strong> "+response[contador]["title"]+"</a> " +
+                        "<a class='title mx-auto'><strong>Categoria:</strong> "+response[contador]["category"]+"</a> " +
+                        "<a class='title ml-auto'><strong>Fecha:</strong> "+fCreated+"</a> " +
+                        "</div><div class='issueBody border-top-0 border-success p-2 bg-orange rounded-bottom'>" +
+                        "<a class='title mx-auto'><strong>Emisor:</strong> "+response[contador]["emailSender"]+"</a><br> " +
+                        "<a class='title ml-auto p-2'><strong>Incidencia:</strong> "+response[contador]["body"]+"</a> " +
+                        "</div>";
+                    } else {
+                        if(response[contador]["read"] == true && response[contador]["answered"] == false) {
+                            content += "<div class='issueTitle col-lg-12 alert alert-danger p-2 mb-0'>" +
+                                "<a class='title'><strong>Asunto:</strong> "+response[contador]["title"]+"</a> " +
+                                "<a class='title mx-auto'><strong>Categoria:</strong> "+response[contador]["category"]+"</a> " +
+                                "<a class='title ml-auto'><strong>Fecha:</strong> "+fCreated+"</a> " +
+                                "</div><div class='issueBody border-top-0 border-danger p-2 bg-orange rounded-bottom'>" +
+                                "<a class='title mx-auto'><strong>Emisor:</strong> "+response[contador]["emailSender"]+"</a> <br>" +
+                                "<a class='title ml-auto '><strong>Incidencia:</strong> "+response[contador]["body"]+"</a> " +
+                                "</div>";
+                        } else {
+                            if(response[contador]["read"] == true && response[contador]["answered"] == true) {
+                                content += "<div class='issueTitle col-lg-12 alert alert-primary p-2 mb-0'>" +
+                                              "<a class='title'><strong>Asunto:</strong> "+response[contador]["title"]+"</a> " +
+                                              "<a class='title mx-auto'><strong>Categoria:</strong> "+response[contador]["category"]+"</a> " +
+                                              "<a class='title ml-auto'><strong>Fecha:</strong> "+fCreated+"</a> " +
+                                            "</div><div class='issueBody border-top-0 border-primary p-2 bg-orange rounded-bottom'>" +
+                                              "<a class='title mx-auto'><strong>Emisor:</strong> "+response[contador]["emailSender"]+" </a> <br>" +
+                                              "<a class='title ml-auto'><strong>Incidencia:</strong> "+response[contador]["body"]+" </a> " +
+                                            "</div>";
+                            }
+                        }
+                    }
+
+                    contador++;
+                });
+
+                content += "</div>";
+                $('section').append(content);
+            }
+        });
+    });
+
+    $("body").on("click", "div.issueTitle", function() {
+        console.log("ENTREEEEEEEEEEEEEEEEEEEE");
+        $(this).next().slideToggle(200);
     });
 
     // <---------------- agregar alimento ------------------->
@@ -373,22 +499,216 @@ $(function () {
        }
 
     });
+//<---------------------------------------------  Añadir alergia personal -------------------------------------------------->
+
+    $("button.addAllergyPersonal").click(function () {
+        $('div.error').empty();
+        var checked = [];
+        $("input[type='checkbox']:checked").each(function () {
+            checked.push(parseInt($(this).val()));
+        })
+        console.log(checked);
+        if(checked.length == 0) {
+            var error = "Debe seleccionar al menos un ingrediente";
+            $('div.error').append(error);
+        } else {
+            if ($("input.nameAllergy").val() == " " || $("input.nameAllergy").val() == "") {
+                var error = "Debe ponerle un nombre a la alergia común";
+                $('div.error').append(error);
+            } else {
+                var parameters = {
+                    "allergyName": $("input.nameAllergy").val(),
+                    "allergyType": "personal",
+                    "allergyIngredients": checked,
+                }
+
+                $.ajax({
+                    data: parameters,
+                    url: "/addAllergyPersonal",
+                    method: "POST",
+                    dataType: "JSON",
+                    success: function (response) {
+                        if(response.correcto == true){
+                            $('div.error').empty();
+                            $('div.error').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                            $('div.error').append("<script> setTimeout(function(){location.href = './list_allergys';}, 3000);</script>");
+
+                        } else {
+                            $('div.error').empty();
+                            $('div.error').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //<---------------------------------------------  Añadir alergia comun -------------------------------------------------->
+
+    $("button.addAllergyGlobal").click(function () {
+        $('div.error').empty();
+        var checked = [];
+        $("input.allergyVal[type='checkbox']:checked").each(function () {
+            checked.push(parseInt($(this).val()));
+        });
+        console.log(checked);
+        if(checked.length == 0) {
+            var error = "Debe seleccionar al menos un ingrediente";
+            $('div.error').append(error);
+        } else {
+            var parameters = {
+                "allergyArray" : checked,
+            };
+
+            $.ajax({
+                data: parameters,
+                url: "/addAllergyComun",
+                method: "POST",
+                dataType: "JSON",
+                success: function (response) {
+                    if(response.correcto == true){
+                        $('div.error').empty();
+                        $('div.error').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                        $('div.error').append("<script> setTimeout(function(){location.href = './list_allergys';}, 3000);</script>");
+
+                    } else {
+                        $('div.error').empty();
+                        $('div.error').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                    }
+                }
+            });
+        }
+    });
+
+    //<---------------------------------------------  Registrar Negocio -------------------------------------------------->
+
+    $("button.registerM").click(function () {
+        $('div.errorReport').empty();
+    });
+
+    $("button.registerCompany").click(function () {
+        $('div.errorReport').empty();
+
+        console.log($("input.imgCompany"));
+
+        if($('input.reservationCompany').prop('checked') ) {
+            var reservation = true;
+        } else {
+            var reservation = false;
+        }
+        if($('input.orderCompany').prop('checked') ) {
+            var order = true;
+        } else {
+            var order = false;
+        }
+
+        var correcto = true;
+        var errores = [];
+        var error = "";
+        $('div.errorReport').empty();
+        if ($('input.nameCompany').val() == "" || $('input.nameCompany').val() == " ") {
+            error = "No puede dejar el campo de nombre de empresa vacio.";
+            errores.push(error);
+            correcto = false;
+        }
+        if($('input.phone').val() == "" || $('input.phone').val() == " " || !(/^(\+34|0034|34)?[6|7|8|9][0-9]{8}$/.test($('input.phone').val()))) {
+       // ^(\+34|0034|34)?[\s|\-|\.]?[6|7|8|9][\s|\-|\.]?([0-9][\s|\-|\.]?){8}$
+            error = "No puede dejar el campo de teléfono vacio y no puede contener letras, prefijo seguido del número de teléfono sin espacios ni guiones.";
+            errores.push(error);
+            correcto = false;
+        }
+        if($('input.addressCompany').val() == "" || $('input.addressCompany').val() == " ") {
+            error = "No puede dejar el campo de dirección vacio.";
+            errores.push(error);
+            correcto = false;
+        }
+
+        if($('select.country > option:selected').val() == "" || $('select.departament > option:selected').val() == "" || $('select.city > option:selected').val() == ""){
+            error = "No se puede dejar pais, provincia o municipio sin seleccionar";
+            errores.push(error);
+            correcto = false;
+        }
+
+        if(! $('input.privacyCompany').prop('checked') ) {
+            error = "Ha de acceptar la politica de privacidad para empresas.";
+            errores.push(error);
+            correcto = false;
+        }
+
+        if(!correcto) {
+            var item = "";
+            var contador = 0;
+
+            errores.forEach(function () {
+                item+="<a class='d-block m-1 alert alert-danger '>"+errores[contador]+"</a>";
+                contador++
+            });
+
+            $('div.errorReport').append(item);
+
+        } else {
+            $('div.errorReport').empty();
+
+            var parameters = {
+                "nameCompany" : $('input.nameCompany').val(),
+                "phone" : $('input.phone').val(),
+                "addressCompany" : $('input.addressCompany').val(),
+                "departamentCompany" : $("select.departamentCompany > option:selected").text(),
+                "cityCompany": $("select.cityCompany > option:selected").text(),
+                "privacyCompany" : true,
+                "imgCompany": $("input.imgCompany").val(),
+                "reservationCompany" : reservation,
+                "orderCompany" : order,
+            };
+
+            console.log(parameters);
+            $.ajax({
+                data: parameters,
+                url: "/registrationCompany",
+                method: "POST",
+                dataType: "JSON",
+                success: function (response) {
+                    if(response.correcto == true){
+                        $('div.errorReport').empty();
+                        $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-info'>"+ response.info +"</div>");
+                        $('div.errorReport').append("<script> setTimeout(function(){location.href = './empresas';}, 3000);</script>");
+
+                    } else {
+                        $('div.errorReport').empty();
+                        $('div.errorReport').append("<div class='col-lg-12 mt-0 text-center alert alert-danger'>"+ response.info +"</div>");
+                    }
+                }
+            });
+        }
+    });
+
+    var idCompany = -1;
+
+     $("button.goAddMenu").click(function () {
+         idCompany = $(this).closest("div.padre").find("input.idCompany").val();
+         console.log(idCompany);
+     });
+
+
+
+
 });
 
 function addNewIngredient(){
         $("div.error").empty();
-    if($("input.nameIngredient").val() == "" || $("input.nameIngredient").val() == " ") {
-        $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> No se puede dejar el nombre vacio o con espacios en blanco.</div>")
+        console.log($("input.nameIngredient").text());
+    if($("input.nameIngredient").val() === "" || $("input.nameIngredient").val() === " ") {
+        $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> No se puede dejar el nombre vacio o con espacios en blanco.</div>");
         return;
     } else {
-        if($("select.catIngredient > option:selected").val() == 0) {
-            $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> Ha de seleccionar una categoria. </div>")
+        if($("select.catIngredient > option:selected").val() === 0) {
+            $("div.error").append("<div class='col-lg-12 mt-0 text-center alert alert-danger'> Ha de seleccionar una categoria. </div>");
         return;
         } else {
             var parameters = {
                 "nameIngredient" : $("input.nameIngredient").val(),
                 "categoryIngredient" : $("select.catIngredient").val()
-            }
+            };
 
             $.ajax({
                 data:parameters,

@@ -41,9 +41,9 @@
                             {% if (user.usercity is not empty) %}
                             <a class="dropdown-item profile" href="./profile" data-toggle="modal" data-target="#myModal">{{user.name}}</a>
                             <a class="dropdown-item" href="./list_allergys">Mis alergias</a>
-                            <a class="dropdown-item" href="./enviarmensaje">Favoritos</a>
-                            <a class="dropdown-item" href="./mensajes">Enviar mensajes</a>
-                            <a class="dropdown-item" href="./editarPerfil">Lista de amigos</a>
+{#                            <a class="dropdown-item" href="./enviarmensaje">Favoritos</a>#}
+{#                            <a class="dropdown-item" href="./mensajes">Enviar mensajes</a>#}
+{#                            <a class="dropdown-item" href="./editarPerfil">Lista de amigos</a>#}
                             {% endif %}
                             <!--ESTO SOLO APARECE SI ERES EMPRESARIO O ENCARGADO-->
                             {% if is_granted('ROLE_SUPER_USER') %}

@@ -4,16 +4,275 @@
 
 {% block body %}
     <link rel="stylesheet" type="text/css" href="./librerias/css/style.css">
-    <main class="container mx-auto">
-        <div class="row">
-            <div class="col-xl-8 col-lg-8 pb-4 px-5 my-5 mx-auto container-changedata rounded border border-warning bg-orange">
-                <img class="mx-auto d-block"src="logo2.png"/>
-                <h1>EMPRESASSSSSS</h1>
-            </div>
+    <main class="containe p-1">
+        <div class="option mt-5 col-lg-12 d-flex">
+            <button class="btn btn-info ml-auto mr-4 registerM" data-toggle="modal" data-target="#registerCompany"> Registrar Negocio </button>
+        </div>
+            <div class="row mb-5">
+            {% if user.getCompanyCollection is empty %}
+                <div class="col-xl-8 col-lg-8 pb-4 px-5 my-5 mx-auto container-changedata rounded border border-warning bg-orange">
+                    <img class="mx-auto d-block"src="logo2.png"/>
+                    <div class="panel panel-info mt-2 mb-4">
+                        <div class="panel-heading rounded-top px-3 py-2 mb-0">
+                            <p class="font-weight-bold mb-0">SafEats informativo:</p>
+                        </div>
+                        <div class="panel-body px-4 py-2 bg-white rounded-bottom">
+                            <p class="mb-2">Querido empresario.</p>
+                            <p class="mb-1">Lo primero desde Safeats queremos darle las gracias por confiar en nosotros y compartir su negocio con nosotros.</p>
+                            <p class="mb-1">El funcionamiento es sencillo arriba a la derecha podrá observar un botton para registrar su primer negocio con nosotros. Una vez registrado le saldran todas las opciones para administrar el sitio.</p>
+                            <p class="mb-1">Es muy inportante para nosotros que distinga que tipo de negocio es el que usted tiene para que le brindemos el mejor servicio posible.</p>
+                            <p class="mb-1">Si su negocio puede albergar reservas indiquelo en el formulario para habilitarle más opciones si se pueden realizar pedidos para llevar también indiquelo.</p>
+                            <p class="mb-0">Muchas gracias por su atención y esperamos que tenga una buena esperiencia de nuestro servicio.</p>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                    <div class="container-mysites my-4 mx-auto col-lg-8 col-md-9 col-sm-10">
+                    {% for company in user.getCompanyCollection %}
+                        <div class="col-lg-12 mt-2 rounded bg-title p-2 pb-1 titleCompany">
+                           <h5 class="font-weight-bold"> {{ company.name }} </h5>
+                        </div>
+                        <div class="col-lg-12 mt-0 rounded-bottom bg-orange p-2 bodyCompany">
+                            <div class="col-lg-12 d-flex flex-wrap">
+                                <div class="col-lg-5 col-sm-12 col-12 my-4">
+                                    <div class="img col-lg-12 my-2 justify-content-center d-flex">
+                                        {% if company.getImage is null %}
+                                            <img class="mx-auto" src="ensalada.jpg" width="300px" height="180px" class="mr-4" style="border-radius: 15px;">
+                                        {% else %}
+                                            <img class="mx-auto" src="{{ company.getImage }}" width="150px" height="150px" class="mr-4" style="border-radius: 15px;">
+                                        {% endif %}
+                                    </div>
+                                    <div class="imgChangeCompany col-lg-12 d-flex justify-content-center mx-center"><button type="button" class="btn bg-blue-buttons text-white mx-auto">Cambiar</button></div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-12 my-2 ml-5 pl-5">
+                                    <a class="font-weight-bold"> Nombre: </a> {{ company.name }}<br>
+                                    <a class="font-weight-bold"> telefono: </a> {{ company.phone }}<br>
+                                    <a class="font-weight-bold"> Direccion: </a> {{ company.address }}<br>
+                                    <a class="font-weight-bold"> Provincia: </a> {{ company.getCompanyDepartament }}<br>
+                                    <a class="font-weight-bold"> Localidad: </a> {{ company.getCompanyCity }}<br>
+
+                                    <button type="button" class="btn bg-blue-buttons text-white my-3 editProfileCompany" data-toggle="modal" data-target="#exampleModalCenter">Editar</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="d-flex flex-wrap pl-3 padre">
+                                <input type="hidden" value="{{ company.getId }}" class="idCompany"/>
+                                <div class="col-lg-6 mx-auto">
+                                    <button class="mx-auto btn bg-blue-buttons text-white my-2 col-lg-8">ver carta</button>
+                                </div>
+                                <div class="col-lg-6 mx-auto">
+                                    <button class="mx-auto btn bg-blue-buttons text-white my-2 col-lg-8 goAddMenu" data-toggle="modal" data-target="#registerMenu">añadir carta</button>
+                                </div>
+                                {% if company.getReservation == true %}
+                                <div class="col-lg-6 mx-auto">
+                                    <button class="mx-auto btn bg-blue-buttons text-white my-2 col-lg-8">gestionar reservas</button>
+                                </div>
+                                {% endif %}
+                                {% if company.getOrders == true %}
+                                <div class="col-lg-6 mx-auto">
+                                    <button class="mx-auto btn bg-blue-buttons text-white my-2 col-lg-8">gestionar pedidos</button>
+                                </div>
+                                {% endif %}
+                                <div class="col-lg-6 mx-auto">
+                                    <button class="mx-auto btn bg-blue-buttons text-white my-2 col-lg-8">eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+            {% endif %}
         </div>
     </main>
 
+    <!-- Registro carta -->
+    <div class="modal fade" id="registerMenu">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
+                <!-- Modal Header -->
+                <div class="modal-header bg-title">
+                    <h4 class="modal-title">Registrar carta menu</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-orange">
+                    <div class="errorReport"></div>
+
+                    <select class="form-control my-2 d-block country categoryCompany">
+                        <option value="" selected disabled> Seleccione una opcion.. </option>
+                        <option value="España"> España </option>
+                    </select>
+
+                    <hr>
+
+
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer bg-title">
+                    <button class="mx-auto btn bg-blue-buttons text-white" data-toggle="modal" data-target="#addNewCategoryPlates">añadir categoria</button>
+                    <button class="mx-auto btn bg-blue-buttons text-white" data-toggle="modal" data-target="#myModalAddPlate">añadir plato</button>
+                    <button class="mx-auto btn bg-blue-buttons text-white" data-toggle="modal" data-target="#addNewIngredient">añadir Ingrediente</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn bg-blue-buttons text-white registerCompany">Guardar cambios</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- add category-->
+    <div class="modal fade" id="addNewCategoryPlates" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-title">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Añadir ingrediente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-orange">
+                    <div class="error my-2 mx-1"></div>
+                    <input type='text' class='form-control nameCategoryCompany mt-4' placeholder='Escribe nombre de la categoria..'/>
+
+                </div>
+                <div class="modal-footer bg-title">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addCategoryCompany">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- add plate -->
+
+    <div class="modal fade" id="myModalAddPlate">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header bg-title">
+            <h4 class="modal-title">Añadir nuevo plato</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body bg-orange">
+            <div class="error"></div>
+            <div class="errorAddIngredient"></div>
+            <input class="form-control mx-auto my-3 col-lg-9 namePlate" type="text" placeholder="Escriba el nombre de su plato.."/>
+            <input class="form-control mx-auto my-3 col-lg-9 price" type="text" placeholder="precio del plato (solo números).."/>
+            <label class="font-weight-bold"> Marque los alimentos que contiene el plato</label>
+            {% set contador = 0 %}
+            {% for category in all_category %}
+                <div class='categoria border-bottom border-dark my-2'><h5>{{ category }}</h5></div>
+                <div class='ingredients col-lg-12'><div class='row row-cols-3'>
+                        {% set compare = category %}
+                        {% for ingredient in all_ingredients %}
+                            {% if ingredient.category  == compare %}
+                                <div class='Ingrecheck col'><input type='checkbox' value="{{ ingredient.id }}"/>{{ ingredient.name }} </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div></div>
+            {% endfor %}
+        </div>
+                <!-- Modal footer -->
+                <div class="modal-footer bg-title">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addAllergyPersonal">Guardar cambios</button>
+                </div>
+
+             </div>
+         </div>
+    </div>
+
+
+
+    <!-- Modal Añadir Ingrediente-->
+    <div class="modal fade" id="addNewIngredient" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-title">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Añadir ingrediente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-orange">
+                    <div class="error my-2 mx-1"></div>
+                    <input type='text' class='form-control nameIngredient mt-4' placeholder='Escribe nombre del alimento..'/>
+                    <select class="form-control my-2 catIngredient">
+                        <option value="0" selected disabled>Seleccione una categoría</option>
+                        <option value="Leche y derivados">Leche y derivados.</option>
+                        <option value="Carnes">Carnes.</option>
+                        <option value="Pescados">Pescados.</option>
+                        <option value="Mariscos">Mariscos</option>
+                        <option value="Huevos">Huevos.</option>
+                        <option value="Verduras y hortalizas">Verduras y hortalizas.</option>
+                        <option value="Fruta">Fruta.</option>
+                        <option value="Legumbres">Legumbres</option>
+                        <option value="Frutos secos">Frutos secos.</option>
+                        <option value="Cereales y derivados, azúcar y dulces">Cereales y derivados, azúcar y dulces.</option>
+                        <option value="Grasas, aceites y mantequillas">Grasas, aceites y mantequillas.</option>
+                    </select>
+                </div>
+                <div class="modal-footer bg-title">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addIngredient">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registro empresa -->
+    <div class="modal fade" id="registerCompany">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header bg-title">
+                    <h4 class="modal-title">Registrar nuevo local o negocio</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-orange">
+                    <div class="errorReport"></div>
+                        <input class="form-control my-2 nameCompany" type="text" placeholder="Escriba el nombre de su negocio *"/>
+                        <input class="form-control my-2 phone" type="text" placeholder="Teléfono de contacto del local *"/>
+                        <input class="form-control my-2 addressCompany" type="text" placeholder="Escriba la dirección de su negocio *"/>
+                        <select class="form-control my-2 d-block country countryCompany">
+                            <option value="" selected disabled> Seleccione una opcion.. </option>
+                            <option value="España"> España </option>
+                        </select>
+
+                        <select id='departament' class='form-control my-2 departament departamentCompany'>
+                        </select>
+
+                        <select id='city' class='form-control mt-2 mb-3 city cityCompany'>
+                        </select>
+                        <label class="my-2 font-weight-bold"> Imagen representativa del negocio:</label><br>
+                        <input type="file" class="my-2 imgCompany"><br>
+
+                        <input type="checkbox" value="true" class="my-2 privacyCompany"/> Pólitica de privacidad para el registro de empresas.<br>
+
+                        <label class="my-2 font-weight-bold"> Opciones extras:</label><br>
+                        <input type="checkbox" value="reservas" class="my-2 reservationCompany"/> Sistema de reservas.<br>
+                        <input type="checkbox" value="recogida" class="my-2 orderCompany"/> Sistema de pedidos para recoger.
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer bg-title">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn bg-blue-buttons text-white registerCompany">Guardar cambios</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
 

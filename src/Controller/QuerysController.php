@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,6 +92,38 @@ class QuerysController extends AbstractController
             return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
         }
 
+    }
+
+    /**
+     * @Route("/getIssues", name="getIssues")
+     */
+    public function getIssues()
+    {
+        $arrayIssues = [];
+        $repositoryIssues = $this->getDoctrine()->getRepository(Issue::class);
+        $all_issues = $repositoryIssues->findAll();
+        $size = count($all_issues);
+        if ($size != 0) {
+            foreach ($all_issues as $issue) {
+                $IssueArray = [
+                    "id" => $issue->getId(),
+                    "emailSender" => $issue->getEmail(),
+                    "title" => $issue->getTitle(),
+                    "category" => $issue->getCategory(),
+                    "timecreated" => $issue->getTimecreated(),
+                    "body" => $issue->getBodyIssue(),
+                    "read" => $issue->getReadIssue(),
+                    "answered" => $issue->getAnswered()
+                ];
+
+                array_push($arrayIssues, $IssueArray);
+            }
+
+            return new JsonResponse($arrayIssues);
+
+        } else {
+            return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
+        }
     }
 
 }

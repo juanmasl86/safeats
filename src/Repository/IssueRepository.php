@@ -35,7 +35,15 @@ class IssueRepository extends ServiceEntityRepository
         ;
     }
     */
-
+    public function findOneById($value): ?Issue
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Issue
     {

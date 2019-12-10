@@ -48,6 +48,31 @@ class Company
      */
     private $category_collection;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $privacy;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $reservation;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $orders;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $phone;
+
     public function __construct()
     {
         $this->category_collection = new ArrayCollection();
@@ -140,6 +165,66 @@ class Company
         if ($this->category_collection->contains($categoryCollection)) {
             $this->category_collection->removeElement($categoryCollection);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getPrivacy(): ?bool
+    {
+        return $this->privacy;
+    }
+
+    public function setPrivacy(?bool $privacy): self
+    {
+        $this->privacy = $privacy;
+
+        return $this;
+    }
+
+    public function getReservation(): ?bool
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?bool $reservation): self
+    {
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    public function getOrders(): ?bool
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(?bool $orders): self
+    {
+        $this->orders = $orders;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }

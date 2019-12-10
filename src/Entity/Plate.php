@@ -33,6 +33,11 @@ class Plate
      */
     private $ingredient_collection;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $id_company;
+
     public function __construct()
     {
         $this->ingredient_collection = new ArrayCollection();
@@ -89,6 +94,18 @@ class Plate
         if ($this->ingredient_collection->contains($ingredientCollection)) {
             $this->ingredient_collection->removeElement($ingredientCollection);
         }
+
+        return $this;
+    }
+
+    public function getIdCompany(): ?int
+    {
+        return $this->id_company;
+    }
+
+    public function setIdCompany(?int $id_company): self
+    {
+        $this->id_company = $id_company;
 
         return $this;
     }

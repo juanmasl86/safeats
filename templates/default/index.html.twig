@@ -98,7 +98,7 @@
                         {% if collection is empty %}
                             <a>No tiene alergias agregadas.</a>
                         {% else %}
-                            {% for collection in allergy %}
+                            {% for allergy in collection %}
                                 {{ allergy.name }}
                             {% endfor %}
                         {% endif %}

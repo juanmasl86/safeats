@@ -45,7 +45,7 @@ button.personal:hover {
 }
 
 .bg-body {
-    background: #9cb9cc;
+    background: #bbc5cc;
 }
 
 div.allergy-title{
@@ -130,4 +130,12 @@ div.aPersonal:hover {
 
 .bg-orange {
     background-color: #fef5e7;
+}
+
+div.categoria {
+    cursor: pointer;
+}
+
+.issueBody {
+    display: none;
 }

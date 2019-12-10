@@ -12,7 +12,7 @@
                 {% if collection is empty %}
                     <a>No tiene alergias agregadas.</a>
                 {% else %}
-                    {% for collection in allergy %}
+                    {% for allergy in collection %}
                         {{ allergy.name }}
                     {% endfor %}
                 {% endif %}
@@ -45,13 +45,30 @@
 
                 <!-- Modal body -->
                 <div class="modal-body bg-body">
-                     alergia común
-                </div>
+                    <div class="error my-2 mx-1"></div>
+                    <div class="row row-cols-2">
+                     {% for allergy in allAllergys %}
+                        <div class="allergy col">
+                            <div class='allergyname col-lg-12 border-bottom border-dark my-2 d-flex'><h5>{{ allergy.name }}</h5> <input type="checkbox" class="ml-auto allergyVal form-control col-lg-1" style="width: 15px; height: 15px;" value="{{ allergy.id }}"/></div>
+                                <div class='aIngredients col-lg-12'><div class='row row-cols-2'>
 
+                                 {% for aingredient in allergy.getIngredientCollection %}
+                                         <div class='Ingredient col'><a> {{ aingredient.name }} </a></div>
+                                 {% endfor %}
+
+                                </div>
+                             </div>
+                        </div>
+
+
+                      {% endfor %}
+
+                    </div>
+                </div>
                 <!-- Modal footer -->
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addAllergyGlobal">Guardar cambios</button>
                 </div>
 
             </div>
@@ -72,23 +89,31 @@
 
                 <!-- Modal body -->
                 <div class="modal-body bg-body">
-
-                    <input class="form-control my-2" type="text" placeholder="Escriba el nombre para su alergia o intolerancia personalizada.."/>
+                    <div class="error"></div>
+                    <div class="errorAddIngredient"></div>
+                    <input class="form-control mx-auto my-3 col-lg-9 nameAllergy" type="text" placeholder="Escriba el nombre para su alergia o intolerancia personalizada.."/>
                     <input type='hidden' class='typeAllergy' value='personal'/>
-                    <div class="col-lg-12 d-flex justify-content-end">
-                        <button type="button" class="col-lg-2 btn bg-blue-buttons text-white my-3 ml-auto" data-toggle="modal" data-target="#addNewIngredient">Añadir ingredientes</button>
-                    </div>
+
                     <label class="font-weight-bold"> Marque los alimentos que desea añadir a su alergia o intolerancia:</label>
-
-
-
-
+                    {% set contador = 0 %}
+                    {% for category in all_category %}
+                    <div class='categoria border-bottom border-dark my-2'><h5>{{ category }}</h5></div>
+                    <div class='ingredients col-lg-12'><div class='row row-cols-3'>
+                            {% set compare = category %}
+                        {% for ingredient in all_ingredients %}
+                            {% if ingredient.category  == compare %}
+                                <div class='Ingrecheck col'><input type='checkbox' value="{{ ingredient.id }}"/>{{ ingredient.name }} </div>
+                            {% endif %}
+                        {% endfor %}
+                        </div></div>
+                    {% endfor %}
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer bg-title">
+                    <button type="button" class="col-lg-3 btn bg-blue-buttons text-white my-3 mr-auto justify-content-start" data-toggle="modal" data-target="#addNewIngredient">Añadir ingredientes</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addAllergyPersonal">Guardar cambios</button>
                 </div>
 
             </div>
@@ -106,8 +131,9 @@
                     </button>
                 </div>
                 <div class="modal-body bg-body">
+                    <div class="error my-2 mx-1"></div>
                     <input type='text' class='form-control nameIngredient mt-4' placeholder='Escribe nombre del alimento..'/>
-                    <select class="form-control my-2">
+                    <select class="form-control my-2 catIngredient">
                         <option value="0" selected disabled>Seleccione una categoría</option>
                         <option value="Leche y derivados">Leche y derivados.</option>
                         <option value="Carnes">Carnes.</option>
@@ -124,7 +150,7 @@
                 </div>
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addIngredient">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -168,7 +194,7 @@
                         {% if collection is empty %}
                             <a>No tiene alergias agregadas.</a>
                         {% else %}
-                            {% for collection in allergy %}
+                            {% for allergy in collection %}
                                 {{ allergy.name }}
                             {% endfor %}
                         {% endif %}

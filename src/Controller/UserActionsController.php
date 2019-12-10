@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Entity\Ingredient;
 use App\Entity\Allergy;
 use App\Entity\Issue;
+use App\Entity\Company;
 
 class UserActionsController extends AbstractController {
     /**
@@ -27,6 +28,7 @@ class UserActionsController extends AbstractController {
                 $issue->setTitle($_POST['title']);
                 $issue->setTimecreated($time);
                 $issue->setReadIssue(false);
+                $issue->setAnswered(false);
                 $manager = $this->getDoctrine()->getManager();
                 $manager->merge($issue);
                 $manager->flush();
@@ -142,4 +144,161 @@ class UserActionsController extends AbstractController {
         return new JsonResponse($result);
 
     }
+
+    /**
+     * @Route("/addAllergyPersonal", name="addAllergyPersonal")
+     */
+    public function addAllergyPersonal()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+        $repositoryIngredients = $this->getDoctrine()->getRepository(Ingredient::class);
+        $correcto = false;
+        if(isset($_POST['allergyName']) && ($_POST['allergyName'] != "" || $_POST['allergyName'] != " ")) {
+            $allergy = new Allergy();
+            $allergy->setName($_POST['allergyName']);
+            $allergy->setType($_POST['allergyType']);
+            if(!empty($_POST['allergyIngredients'])) {
+                foreach($_POST['allergyIngredients'] as $aIngredient) {
+                    $ingredient =  $repositoryIngredients->findOneById($aIngredient);
+                    $allergy->addIngredientCollection($ingredient);
+                }
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($allergy);
+                $manager->flush();
+
+                $user->addAllergyCollection($allergy);
+                $manager = $this->getDoctrine()->getManager();
+                $manager->merge($user);
+                $manager->flush();
+
+                $correcto = true;
+
+                $msgInfo = "Se ha añadido la alergia correctamente.";
+                $result = [
+                    "correcto" => $correcto,
+                    "info" => $msgInfo
+                ];
+
+            } else {
+
+                $msgInfo = "No se encontraron ingredientes para añadir a su alergia.";
+                $result = [
+                    "correcto" => $correcto,
+                    "info" => $msgInfo
+                ];
+            }
+
+        } else {
+
+            $msgInfo = "Vaya algo salio mal y no se encontraron las variables para añadir la nueva alergia.";
+            $result = [
+                "correcto" => $correcto,
+                "info" => $msgInfo
+            ];
+
+        }
+
+        return new JsonResponse($result);
+
+    }
+
+    /**
+     * @Route("/addAllergyComun", name="addAllergyComun")
+     */
+    public function addAllergyComun()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+        $repositoryAllergy = $this->getDoctrine()->getRepository(Allergy::class);
+        $correcto = false;
+        if(isset($_POST['allergyArray'])) {
+
+            if(!empty($_POST['allergyArray'])) {
+                foreach($_POST['allergyArray'] as $idAllergy) {
+                    $allergy =  $repositoryAllergy->findOneById($idAllergy);
+                    $user->addAllergyCollection($allergy);
+                }
+                $manager = $this->getDoctrine()->getManager();
+                $manager->merge($user);
+                $manager->flush();
+
+                $correcto = true;
+
+                $msgInfo = "Se ha añadido la alergia correctamente.";
+                $result = [
+                    "correcto" => $correcto,
+                    "info" => $msgInfo
+                ];
+
+            } else {
+
+                $msgInfo = "No se encontrar ninguna alergia con el id seleccionado.";
+                $result = [
+                    "correcto" => $correcto,
+                    "info" => $msgInfo
+                ];
+            }
+
+        } else {
+
+            $msgInfo = "Vaya algo salio mal y no se encontraron las variables para añadir la nueva alergia.";
+            $result = [
+                "correcto" => $correcto,
+                "info" => $msgInfo
+            ];
+
+        }
+
+        return new JsonResponse($result);
+
+    }
+
+    /**
+     * @Route("/registrationCompany", name="registrationCompany")
+     */
+    public function registrationCompany()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+
+        $correcto = false;
+
+        if(isset($_POST["nameCompany"]) && $_POST["nameCompany"] != "" && $_POST["nameCompany"] != " ") {
+            $company = new Company();
+            $company->setName($_POST["nameCompany"]);
+            $company->setPhone($_POST["phone"]);
+            $company->setAddress($_POST["addressCompany"]);
+            $company->setCompanyDepartament($_POST["departamentCompany"]);
+            $company->setCompanyCity($_POST["cityCompany"]);
+            $company->setPrivacy($_POST["privacyCompany"]);
+            $company->setReservation($_POST["reservationCompany"]);
+            $company->setOrders($_POST["orderCompany"]);
+            $company->setUser($user);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($company);
+            $manager->flush();
+
+            $correcto = true;
+
+            $msgInfo = "Se ha añadido el negocio correctamente.";
+            $result = [
+                "correcto" => $correcto,
+                "info" => $msgInfo
+            ];
+
+        } else {
+
+            $msgInfo = "Vaya algo salio mal y no se puedo añadir el negocio.";
+            $result = [
+                "correcto" => $correcto,
+                "info" => $msgInfo
+            ];
+
+        }
+
+        return new JsonResponse($result);
+
+    }
+
 }
