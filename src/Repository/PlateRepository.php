@@ -36,6 +36,18 @@ class PlateRepository extends ServiceEntityRepository
     }
     */
 
+
+    public function findByIdCompany($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id_company = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.name', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Plate
     {
@@ -47,4 +59,14 @@ class PlateRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findOneById($value): ?Plate
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

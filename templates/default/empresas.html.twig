@@ -97,15 +97,17 @@
 
                 <!-- Modal body -->
                 <div class="modal-body bg-orange">
-                    <div class="errorReport"></div>
-
-                    <select class="form-control my-2 d-block country categoryCompany">
-                        <option value="" selected disabled> Seleccione una opcion.. </option>
-                        <option value="España"> España </option>
+                    <div class="errorMenu"></div>
+                    <label class="font-weight-bold">Seleciona una categoria:</label>
+                    <select class="form-control my-2 d-block categoryCompany">
+                        <option value='0' selected disabled> Seleccione una opcion.. </option>
                     </select>
 
                     <hr>
+                    <label class="font-weight-bold">Seleciona uno o varios platos para añadir a la categoria seleccionada:</label>
+                    <div class="plates mb-2">
 
+                    </div>
 
 
                 </div>
@@ -116,7 +118,7 @@
                     <button class="mx-auto btn bg-blue-buttons text-white" data-toggle="modal" data-target="#myModalAddPlate">añadir plato</button>
                     <button class="mx-auto btn bg-blue-buttons text-white" data-toggle="modal" data-target="#addNewIngredient">añadir Ingrediente</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn bg-blue-buttons text-white registerCompany">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white registerMenu">Guardar cambios</button>
                 </div>
 
             </div>
@@ -128,14 +130,14 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-title">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Añadir ingrediente</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Añadir categoria menú</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body bg-orange">
-                    <div class="error my-2 mx-1"></div>
-                    <input type='text' class='form-control nameCategoryCompany mt-4' placeholder='Escribe nombre de la categoria..'/>
+                    <div class="error mt-2 mx-1"></div>
+                    <input type='text' class='form-control nameCategoryCompany mt-3' placeholder='Escribe nombre de la categoria..'/>
 
                 </div>
                 <div class="modal-footer bg-title">
@@ -181,7 +183,7 @@
                 <!-- Modal footer -->
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white addAllergyPersonal">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addPlate">Guardar cambios</button>
                 </div>
 
              </div>

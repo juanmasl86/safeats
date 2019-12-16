@@ -139,26 +139,37 @@ class DefaultController extends AbstractController
         $token = $this->get('security.token_storage')->getToken();
         $user = $token->getUser();
 
-        $repositoryIngredients = $this->getDoctrine()->getRepository(Ingredient::class);
-        $all_ingredients = $repositoryIngredients->findAll();
+        if($user == 'anon.') { //Filtro para los usuarios logueados
 
-        $em =$this->getDoctrine()->getEntityManager();
-        $con = $em->getConnection();
-        $sql = 'SELECT DISTINCT category 
+            return $this->redirectToRoute('app_login');
+
+        } else {
+            if ($user->getRoles()[0] == "ROLE_USER" || $user->getRoles()[0] == "ROLE_ADMIN") {
+                return $this->redirectToRoute('app_login');
+            } else {
+                $repositoryIngredients = $this->getDoctrine()->getRepository(Ingredient::class);
+                $all_ingredients = $repositoryIngredients->findAll();
+
+                $em =$this->getDoctrine()->getEntityManager();
+                $con = $em->getConnection();
+                $sql = 'SELECT DISTINCT category 
                     FROM ingredient 
                     ORDER BY category ASC';
-        $stmt = $con->prepare($sql);
-        $stmt->execute();
+                $stmt = $con->prepare($sql);
+                $stmt->execute();
 
-        $categorys =[];
+                $categorys =[];
 
-        foreach ($stmt->fetchAll() AS $category) {
-            array_push($categorys, $category["category"]);
+                foreach ($stmt->fetchAll() AS $category) {
+                    array_push($categorys, $category["category"]);
+                }
+
+                return $this->render('default/empresas.html.twig', [
+                    'user' => $user , "all_category" => $categorys, "all_ingredients" => $all_ingredients
+                ]);
+            }
         }
 
-        return $this->render('default/empresas.html.twig', [
-            'user' => $user , "all_category" => $categorys, "all_ingredients" => $all_ingredients
-        ]);
 
 
     }

@@ -73,9 +73,21 @@ class Company
      */
     private $phone;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Commentary", mappedBy="companyReceiver")
+     */
+    private $commentaries;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="favorites")
+     */
+    private $followers;
+
     public function __construct()
     {
         $this->category_collection = new ArrayCollection();
+        $this->commentaries = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -225,6 +237,65 @@ class Company
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentary[]
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setCompanyReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->contains($commentary)) {
+            $this->commentaries->removeElement($commentary);
+            // set the owning side to null (unless already changed)
+            if ($commentary->getCompanyReceiver() === $this) {
+                $commentary->setCompanyReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(User $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $follower->addFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(User $follower): self
+    {
+        if ($this->followers->contains($follower)) {
+            $this->followers->removeElement($follower);
+            $follower->removeFavorite($this);
+        }
 
         return $this;
     }

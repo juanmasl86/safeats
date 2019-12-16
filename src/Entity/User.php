@@ -92,10 +92,22 @@ class User implements UserInterface
      */
     private $privacy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Commentary", mappedBy="sender")
+     */
+    private $commentaries;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Company", inversedBy="followers")
+     */
+    private $favorites;
+
     public function __construct()
     {
         $this->allergy_collection = new ArrayCollection();
         $this->company_collection = new ArrayCollection();
+        $this->commentaries = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -333,6 +345,63 @@ class User implements UserInterface
     public function setPrivacy(?bool $privacy): self
     {
         $this->privacy = $privacy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentary[]
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->contains($commentary)) {
+            $this->commentaries->removeElement($commentary);
+            // set the owning side to null (unless already changed)
+            if ($commentary->getSender() === $this) {
+                $commentary->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Company[]
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Company $favorite): self
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites[] = $favorite;
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Company $favorite): self
+    {
+        if ($this->favorites->contains($favorite)) {
+            $this->favorites->removeElement($favorite);
+        }
 
         return $this;
     }

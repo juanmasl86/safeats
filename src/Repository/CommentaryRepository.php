@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Company;
+use App\Entity\Commentary;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Company|null find($id, $lockMode = null, $lockVersion = null)
- * @method Company|null findOneBy(array $criteria, array $orderBy = null)
- * @method Company[]    findAll()
- * @method Company[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Commentary|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Commentary|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Commentary[]    findAll()
+ * @method Commentary[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CompanyRepository extends ServiceEntityRepository
+class CommentaryRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Company::class);
+        parent::__construct($registry, Commentary::class);
     }
 
     // /**
-    //  * @return Company[] Returns an array of Company objects
+    //  * @return Commentary[] Returns an array of Commentary objects
     //  */
     /*
     public function findByExampleField($value)
@@ -35,17 +35,9 @@ class CompanyRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findOneByid($value): ?Company
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.id = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-            ;
-    }
+
     /*
-    public function findOneBySomeField($value): ?Company
+    public function findOneBySomeField($value): ?Commentary
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

@@ -38,6 +38,11 @@ class Plate
      */
     private $id_company;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $price;
+
     public function __construct()
     {
         $this->ingredient_collection = new ArrayCollection();
@@ -106,6 +111,18 @@ class Plate
     public function setIdCompany(?int $id_company): self
     {
         $this->id_company = $id_company;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

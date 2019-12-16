@@ -6,9 +6,11 @@
     <link rel="stylesheet" type="text/css" href="./librerias/css/style.css">
 <div class="container">
     <main>
+        <input type="hidden" class="usercity" value="{{ user.getUsercity }}"/>
+        <input type="hidden" class="userdepartament" value="{{ user.getDepartament }}"/>
         <div class="row">
             <div class="container-search d-flex justify-content-center mt-5 col-lg-12 font-">
-                <input type="text" class="form-control mr-2 col-lg-9 valueSearch" placeholder="Escriba localidad o nombre de restaurante para filtrar.."/> <button type="button" class="btn personal border col-lg-1">Buscar</button>
+                <input type="text" class="form-control mr-2 col-lg-9 col-md-8 col-sm-10 col-9 valueSearch" placeholder="Escriba localidad o nombre de restaurante para filtrar.."/> <button type="button" class="btn personal border col-lg-1 col-md-2 col-sm-2 col-2">Buscar</button>
             </div>
         </div>
         <div class="row">
@@ -34,7 +36,7 @@
                 </nav>
             </div>
         </div>
-        <div class="container-restaurants" style="height: 350px;">
+        <div class="container-restaurants" style="min-height: 350px;">
 
         </div>
         <div class="container-nav col-lg-12 d-flex justify-content-center font-weight-bold">
@@ -59,6 +61,35 @@
             </nav>
         </div>
     </main>
+
+
+    <!-- The Modal -->
+    <div class="modal fade" id="menu">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header bg-menu">
+                    <h4 class="modal-title text-white">Menu </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-orange">
+                    <div class="menu-container col-lg-12 col-md-12 col-sm-12 col-12">
+
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer bg-menu">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <!-- The Modal -->
     <div class="modal fade" id="myModal">
