@@ -70,7 +70,7 @@
                         {% if collection is empty %}
                             <a>No tiene alergias agregadas.</a>
                         {% else %}
-                            {% for collection in allergy %}
+                            {% for allergy in collection %}
                                 {{ allergy.name }}
                             {% endfor %}
                         {% endif %}
@@ -101,6 +101,21 @@
                     </button>
                 </div>
                 <div class="modal-body bg-body">
+                    {% if is_granted('ROLE_USER') %}
+                        <div class="panel panel-info mt-2 mb-4">
+                            <div class="panel-heading rounded-top px-3 py-2 mb-0">
+                                <p class="font-weight-bold mb-0">SafEats informativo:</p>
+                            </div>
+                            <div class="panel-body px-4 py-2 bg-white rounded-bottom">
+                                <p class="mb-2 font-weight-bold">¿Es usted el dueño o responsable de un local de restauración?</p>
+                                <p class="mb-2">Si es asi escriba ACTIVAR en la siguiente caja de texto y Guarde los cambios para poder empezar a registrar su negocio en nuestro sitio WEB.</p>
+                                <p class="mb-2">Sus clientes se lo agradecerán y por supuesto nosotros también.</p>
+                                <span class="font-weight-bold mb-3 d-block">Obtener permisos:</span>
+                                <input type="text" class="form-control my-3 d-block permisos" placeholder="ACT...."/>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="errorEdit"></div>
                     <div class="form">
                         <span class="font-weight-bold mb-3 d-block">Datos personales:</span>
                         <input type="text" class="form-control my-3 d-block name" placeholder="Nombre"/>
@@ -110,7 +125,7 @@
                         <input type="text" class="form-control my-3 d-block address" placeholder="Introduzca dirección"/>
                         <input type="text" class="form-control my-3 d-block postalCode" placeholder="Código postal"/>
                         <select class="form-control my-2 d-block country">
-                            <option value="" selected disabled> Seleccione una opcion.. </option>
+                            <option value="0" selected disabled> Seleccione una opcion.. </option>
                             <option value="España"> España </option>
                         </select>
 
@@ -120,13 +135,16 @@
                         <select id='city' class='form-control mt-2 my-3 city'>
                         </select>
 
+                        <input type="hidden" class="role" value="{{ user.getRoles[0] }}"/>
+
                     </div>
                 </div>
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white editPersonalData">Guardar cambios</button>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 {% endblock %}

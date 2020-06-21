@@ -35,7 +35,17 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
     */
-
+    public function findByIdCompany($value)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id_company = :val')
+            ->setParameter('val', $value)
+            ->orderBy('c.name', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Category
     {
@@ -47,4 +57,14 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findOneById($value): ?Category
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

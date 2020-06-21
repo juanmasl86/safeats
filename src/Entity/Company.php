@@ -48,9 +48,46 @@ class Company
      */
     private $category_collection;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $privacy;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $reservation;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $orders;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Commentary", mappedBy="companyReceiver")
+     */
+    private $commentaries;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="favorites")
+     */
+    private $followers;
+
     public function __construct()
     {
         $this->category_collection = new ArrayCollection();
+        $this->commentaries = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +176,125 @@ class Company
     {
         if ($this->category_collection->contains($categoryCollection)) {
             $this->category_collection->removeElement($categoryCollection);
+        }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getPrivacy(): ?bool
+    {
+        return $this->privacy;
+    }
+
+    public function setPrivacy(?bool $privacy): self
+    {
+        $this->privacy = $privacy;
+
+        return $this;
+    }
+
+    public function getReservation(): ?bool
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?bool $reservation): self
+    {
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    public function getOrders(): ?bool
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(?bool $orders): self
+    {
+        $this->orders = $orders;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentary[]
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setCompanyReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->contains($commentary)) {
+            $this->commentaries->removeElement($commentary);
+            // set the owning side to null (unless already changed)
+            if ($commentary->getCompanyReceiver() === $this) {
+                $commentary->setCompanyReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(User $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $follower->addFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(User $follower): self
+    {
+        if ($this->followers->contains($follower)) {
+            $this->followers->removeElement($follower);
+            $follower->removeFavorite($this);
         }
 
         return $this;

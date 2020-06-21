@@ -5,14 +5,14 @@
 {% block body %}
     <link rel="stylesheet" type="text/css" href="./librerias/css/style.css">
     <main class="container mx-auto">
-        <section class="mt-5 col-lg-9 d-block border border-danger rounded bg-section mx-auto" style="height: 550px;">
+        <section class="mt-5 col-lg-9 d-block border border-danger rounded bg-orange mx-auto" style="height: 550px;">
             <div class=" mt-5 border-dark border-bottom col-lg-12 d-flex allergy-title"><h4 class="col-lg-11"> Mis Alergias </h4><img class="allergy col-lg-1" src="minus.png"/></div>
             <div class="col-lg-12 allergy">
                 {% set collection = user.getAllergyCollection() %}
                 {% if collection is empty %}
                     <a>No tiene alergias agregadas.</a>
                 {% else %}
-                    {% for collection in allergy %}
+                    {% for allergy in collection %}
                         {{ allergy.name }}
                     {% endfor %}
                 {% endif %}
@@ -45,13 +45,30 @@
 
                 <!-- Modal body -->
                 <div class="modal-body bg-body">
-                     alergia común
-                </div>
+                    <div class="error my-2 mx-1"></div>
+                    <div class="row row-cols-2">
+                     {% for allergy in allAllergys %}
+                        <div class="allergy col">
+                            <div class='allergyname col-lg-12 border-bottom border-dark my-2 d-flex'><h5>{{ allergy.name }}</h5> <input type="checkbox" class="ml-auto allergyVal form-control col-lg-1" style="width: 15px; height: 15px;" value="{{ allergy.id }}"/></div>
+                                <div class='aIngredients col-lg-12'><div class='row row-cols-2'>
 
+                                 {% for aingredient in allergy.getIngredientCollection %}
+                                         <div class='Ingredient col'><a> {{ aingredient.name }} </a></div>
+                                 {% endfor %}
+
+                                </div>
+                             </div>
+                        </div>
+
+
+                      {% endfor %}
+
+                    </div>
+                </div>
                 <!-- Modal footer -->
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addAllergyGlobal">Guardar cambios</button>
                 </div>
 
             </div>
@@ -72,23 +89,31 @@
 
                 <!-- Modal body -->
                 <div class="modal-body bg-body">
-
-                    <input class="form-control my-2" type="text" placeholder="Escriba el nombre para su alergia o intolerancia personalizada.."/>
+                    <div class="error"></div>
+                    <div class="errorAddIngredient"></div>
+                    <input class="form-control mx-auto my-3 col-lg-9 nameAllergy" type="text" placeholder="Escriba el nombre para su alergia o intolerancia personalizada.."/>
                     <input type='hidden' class='typeAllergy' value='personal'/>
-                    <div class="col-lg-12 d-flex justify-content-end">
-                        <button type="button" class="col-lg-2 btn bg-blue-buttons text-white my-3 ml-auto" data-toggle="modal" data-target="#addNewIngredient">Añadir ingredientes</button>
-                    </div>
+
                     <label class="font-weight-bold"> Marque los alimentos que desea añadir a su alergia o intolerancia:</label>
-
-
-
-
+                    {% set contador = 0 %}
+                    {% for category in all_category %}
+                    <div class='categoria border-bottom border-dark my-2'><h5>{{ category }}</h5></div>
+                    <div class='ingredients col-lg-12'><div class='row row-cols-3'>
+                            {% set compare = category %}
+                        {% for ingredient in all_ingredients %}
+                            {% if ingredient.category  == compare %}
+                                <div class='Ingrecheck col'><input type='checkbox' value="{{ ingredient.id }}"/>{{ ingredient.name }} </div>
+                            {% endif %}
+                        {% endfor %}
+                        </div></div>
+                    {% endfor %}
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer bg-title">
+                    <button type="button" class="col-lg-3 btn bg-blue-buttons text-white my-3 mr-auto justify-content-start" data-toggle="modal" data-target="#addNewIngredient">Añadir ingredientes</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addAllergyPersonal">Guardar cambios</button>
                 </div>
 
             </div>
@@ -106,8 +131,9 @@
                     </button>
                 </div>
                 <div class="modal-body bg-body">
+                    <div class="error my-2 mx-1"></div>
                     <input type='text' class='form-control nameIngredient mt-4' placeholder='Escribe nombre del alimento..'/>
-                    <select class="form-control my-2">
+                    <select class="form-control my-2 catIngredient">
                         <option value="0" selected disabled>Seleccione una categoría</option>
                         <option value="Leche y derivados">Leche y derivados.</option>
                         <option value="Carnes">Carnes.</option>
@@ -124,7 +150,7 @@
                 </div>
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white addIngredient">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -168,9 +194,30 @@
                         {% if collection is empty %}
                             <a>No tiene alergias agregadas.</a>
                         {% else %}
-                            {% for collection in allergy %}
-                                {{ allergy.name }}
-                            {% endfor %}
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+                                {% for allergy in collection %}
+                                    <tr>
+                                        <th scope="row">{{ allergy.getId }}</th>
+                                        <td>{{ allergy.name }}</td>
+                                        <td>{{ allergy.type }}</td>
+                                        <td class="eliminar">eliminar</td>
+                                    </tr>
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
                         {% endif %}
                     </div>
 
@@ -199,6 +246,21 @@
                     </button>
                 </div>
                 <div class="modal-body bg-body">
+                    {% if is_granted('ROLE_USER') %}
+                        <div class="panel panel-info mt-2 mb-4">
+                            <div class="panel-heading rounded-top px-3 py-2 mb-0">
+                                <p class="font-weight-bold mb-0">SafEats informativo:</p>
+                            </div>
+                            <div class="panel-body px-4 py-2 bg-white rounded-bottom">
+                                <p class="mb-2 font-weight-bold">¿Es usted el dueño o responsable de un local de restauración?</p>
+                                <p class="mb-2">Si es asi escriba ACTIVAR en la siguiente caja de texto y Guarde los cambios para poder empezar a registrar su negocio en nuestro sitio WEB.</p>
+                                <p class="mb-2">Sus clientes se lo agradecerán y por supuesto nosotros también.</p>
+                                <span class="font-weight-bold mb-3 d-block">Obtener permisos:</span>
+                                <input type="text" class="form-control my-3 d-block permisos" placeholder="ACT...."/>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="errorEdit"></div>
                     <div class="form">
                         <span class="font-weight-bold mb-3 d-block">Datos personales:</span>
                         <input type="text" class="form-control my-3 d-block name" placeholder="Nombre"/>
@@ -208,7 +270,7 @@
                         <input type="text" class="form-control my-3 d-block address" placeholder="Introduzca dirección"/>
                         <input type="text" class="form-control my-3 d-block postalCode" placeholder="Código postal"/>
                         <select class="form-control my-2 d-block country">
-                            <option value="" selected disabled> Seleccione una opcion.. </option>
+                            <option value="0" selected disabled> Seleccione una opcion.. </option>
                             <option value="España"> España </option>
                         </select>
 
@@ -218,13 +280,16 @@
                         <select id='city' class='form-control mt-2 my-3 city'>
                         </select>
 
+                        <input type="hidden" class="role" value="{{ user.getRoles[0] }}"/>
+
                     </div>
                 </div>
                 <div class="modal-footer bg-title">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn bg-blue-buttons text-white">Guardar cambios</button>
+                    <button type="button" class="btn bg-blue-buttons text-white editPersonalData">Guardar cambios</button>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 {% endblock %}

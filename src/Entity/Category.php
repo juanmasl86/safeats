@@ -33,6 +33,11 @@ class Category
      */
     private $plate_collection;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $id_company;
+
     public function __construct()
     {
         $this->companies = new ArrayCollection();
@@ -111,6 +116,18 @@ class Category
                 $plateCollection->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdCompany(): ?int
+    {
+        return $this->id_company;
+    }
+
+    public function setIdCompany(?int $id_company): self
+    {
+        $this->id_company = $id_company;
 
         return $this;
     }

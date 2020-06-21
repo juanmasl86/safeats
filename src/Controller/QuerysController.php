@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
+use App\Entity\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Ingredient;
+use App\Entity\Category;
+use App\Entity\Plate;
+use App\Entity\User;
 class QuerysController extends AbstractController
 {
     /**
@@ -28,7 +33,7 @@ class QuerysController extends AbstractController
         } else {
             return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
         }
-        
+
     }
 
     /**
@@ -91,6 +96,168 @@ class QuerysController extends AbstractController
             return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
         }
 
+    }
+
+    /**
+     * @Route("/getIssues", name="getIssues")
+     */
+    public function getIssues()
+    {
+        $arrayIssues = [];
+        $repositoryIssues = $this->getDoctrine()->getRepository(Issue::class);
+        $all_issues = $repositoryIssues->findAll();
+        $size = count($all_issues);
+        if ($size != 0) {
+            foreach ($all_issues as $issue) {
+                $IssueArray = [
+                    "id" => $issue->getId(),
+                    "emailSender" => $issue->getEmail(),
+                    "title" => $issue->getTitle(),
+                    "category" => $issue->getCategory(),
+                    "timecreated" => $issue->getTimecreated(),
+                    "body" => $issue->getBodyIssue(),
+                    "read" => $issue->getReadIssue(),
+                    "answered" => $issue->getAnswered()
+                ];
+
+                array_push($arrayIssues, $IssueArray);
+            }
+
+            return new JsonResponse($arrayIssues);
+
+        } else {
+            return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * @Route("/getPlatesCategories", name="getPlatesCategories")
+     */
+    public function getPlatesCategories()
+    {
+        if(isset($_POST['company'])) {
+
+                $em =$this->getDoctrine()->getEntityManager();
+                $con = $em->getConnection();
+                $sql = 'SELECT * FROM category WHERE id_company = ' .$_POST['company'];
+                $stmt = $con->prepare($sql);
+                $stmt->execute();
+
+
+                $sql2 = 'SELECT * FROM plate WHERE category_id IS NULL AND id_company = ' .$_POST['company'];
+                $stmt2 = $con->prepare($sql2);
+                $stmt2->execute();
+
+                $result = [
+                    "categories" => $stmt->fetchAll(),
+                    "plates" => $stmt2->fetchAll()
+                ];
+
+                return new JsonResponse($result);
+
+        } else {
+            return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
+        }
+
+    }
+
+    /**
+     * @Route("/getCompanies", name="getCompanies")
+     */
+    public function getCompanies()
+    {
+
+        if(isset($_POST['city'])) {
+            $em =$this->getDoctrine()->getEntityManager();
+            $con = $em->getConnection();
+            $sql = "SELECT * FROM company WHERE company_city = '".$_POST['city']."'";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+            $companybycity = $stmt->fetchAll();
+
+            if ($companybycity) {
+            return new JsonResponse($companybycity);
+            } else {
+                $em =$this->getDoctrine()->getEntityManager();
+                $con = $em->getConnection();
+                $sql = "SELECT * FROM company WHERE company_departament = '".$_POST['departament']."'";
+                $stmt2 = $con->prepare($sql);
+                $stmt2->execute();
+                $companybydepartament = $stmt->fetchAll();
+                return new JsonResponse($companybydepartament);
+            }
+
+        } else {
+            return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * @Route("/getMenu", name="getMenu")
+     */
+    public function getMenu()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        $user = $token->getUser();
+
+        if(isset($_POST['id'])) {
+            $repositoryCompanies = $this->getDoctrine()->getRepository(Company::class);
+            $company = $repositoryCompanies->findOneById($_POST['id']);
+
+            $ingredientsAllergy =[];
+            foreach($user->getAllergyCollection() AS $allergy){
+                foreach ($allergy->getIngredientCollection() AS $ingrediente2){
+                    array_push($ingredientsAllergy,$ingrediente2->getName());
+                }
+            }
+
+
+                $infoCategory = [];
+                    $infoPlate =[];
+
+            foreach ($company->getCategoryCollection() AS $category) {
+
+                foreach ($category->getPlateCollection() AS $plate) {
+                        $exist = false;
+                        $badIngredient = [];
+                    foreach ($plate->getIngredientCollection() AS $ingredient) {
+                        foreach ($ingredientsAllergy AS $compare) {
+                            if ($compare == $ingredient->getName()) {
+                                $exist = true;
+                                array_push($badIngredient, $compare);
+                            }
+
+                        }
+                    }
+                    if($exist) {
+                        $plateAllergy = [
+                            "namePlate" => $plate->getName(),
+                            "pricePlate" =>  $plate->getPrice(),
+                            "found" => $badIngredient
+                        ];
+
+                        array_push($infoPlate, $plateAllergy);
+                    } else {
+                        $plateAllergy = [
+                            "namePlate" => $plate->getName(),
+                            "pricePlate" =>  $plate->getPrice(),
+                        ];
+                        array_push($infoPlate, $plateAllergy);
+                    }
+                }
+                $plateCategory = [
+                    "nameCategory" => $category->getName(),
+                    "plates" =>  $infoPlate,
+                ];
+                array_push($infoCategory, $plateCategory);
+            }
+
+
+            return new JsonResponse($infoCategory);
+
+        } else {
+            return new JsonResponse('no results found', Response::HTTP_NOT_FOUND);
+        }
     }
 
 }

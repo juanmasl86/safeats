@@ -35,7 +35,26 @@ class AllergyRepository extends ServiceEntityRepository
         ;
     }
     */
-
+    public function findByType($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.type = :val')
+            ->setParameter('val', $value)
+            ->orderBy('a.name', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function findOneByid($value): ?Allergy
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Allergy
     {

@@ -47,7 +47,11 @@ class ManageController extends AbstractController
                     $manager->merge($ingredient);
                     $manager->flush();
                     $correcto = true;
+                if ($user->getRoles()[0] != "ROLE_ADMIN") {
+                    $msgInfo = "Se ha añadido el alimento correctamente. Por favor refresque la página para que le aparezca el nuevo alimento añadido.";
+                } else {
                     $msgInfo = "Se ha añadido el alimento correctamente.";
+                }
                     $result = [
                         "correcto" => $correcto,
                         "info" => $msgInfo
@@ -71,4 +75,57 @@ class ManageController extends AbstractController
         return new JsonResponse($result);
 
     }
+
+    /**
+     * @Route("/addAllergy", name="addAllergy")
+     */
+    public function addAllergy()
+    {
+
+        $repositoryIngredients = $this->getDoctrine()->getRepository(Ingredient::class);
+        $correcto = false;
+        if(isset($_POST['allergyName']) && ($_POST['allergyName'] != "" || $_POST['allergyName'] != " ")) {
+            $allergy = new Allergy();
+            $allergy->setName($_POST['allergyName']);
+            $allergy->setType($_POST['allergyType']);
+            if(!empty($_POST['allergyIngredients'])) {
+                foreach($_POST['allergyIngredients'] as $aIngredient) {
+                    $ingredient =  $repositoryIngredients->findOneById($aIngredient);
+                    $allergy->addIngredientCollection($ingredient);
+                }
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($allergy);
+                $manager->flush();
+
+                $correcto = true;
+
+                $msgInfo = "Se ha añadido la alergia correctamente.";
+                $result = [
+                    "correcto" => $correcto,
+                    "info" => $msgInfo
+                ];
+
+            } else {
+
+                $msgInfo = "No se encontraron ingredientes para añadir a su alergia.";
+                $result = [
+                    "correcto" => $correcto,
+                    "info" => $msgInfo
+                ];
+            }
+
+        } else {
+
+            $msgInfo = "Vaya algo salio mal y no se encontraron las variables para añadir la nueva alergia.";
+            $result = [
+                "correcto" => $correcto,
+                "info" => $msgInfo
+            ];
+
+        }
+
+        return new JsonResponse($result);
+
+    }
+
 }
